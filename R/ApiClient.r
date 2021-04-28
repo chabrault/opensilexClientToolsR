@@ -82,7 +82,7 @@ checkAuthorization <-function(){
       stop("You must first connect to an OpenSILEX Instance using connectToOpenSILEXWS() function")
     }
 
-    if(get("USERNAME",opensilexWSClientR:::configWS) && get("PASSWORD",opensilexWSClientR:::configWS) && get("BASE_PATH",opensilexWSClientR:::configWS)){
+    if(!is.null(get("USERNAME",opensilexWSClientR:::configWS) && get("PASSWORD",opensilexWSClientR:::configWS) && get("BASE_PATH",opensilexWSClientR:::configWS)){
       connectToOpenSILEXWS(get("USERNAME",opensilexWSClientR:::configWS),get("PASSWORD",opensilexWSClientR:::configWS),get("BASE_PATH",opensilexWSClientR:::configWS))
     }
 }
