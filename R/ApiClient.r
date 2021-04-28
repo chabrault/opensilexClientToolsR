@@ -82,15 +82,15 @@ checkAuthorization <-function(){
       stop("You must first connect to an OpenSILEX Instance using connectToOpenSILEXWS() function")
     }
 
-    if(!is.null(get("USERNAME",opensilexWSClientR:::configWS) && get("PASSWORD",opensilexWSClientR:::configWS) && get("BASE_PATH",opensilexWSClientR:::configWS)){
-      connectToOpenSILEXWS(get("USERNAME",opensilexWSClientR:::configWS),get("PASSWORD",opensilexWSClientR:::configWS),get("BASE_PATH",opensilexWSClientR:::configWS))
+    if(get("IDENTIFIER",opensilexWSClientR:::configWS) != "" && get("PASSWORD",opensilexWSClientR:::configWS) != "" && get("BASE_PATH",opensilexWSClientR:::configWS)  != ""){
+      connectToOpenSILEXWS(get("IDENTIFIER",opensilexWSClientR:::configWS),get("PASSWORD",opensilexWSClientR:::configWS),get("BASE_PATH",opensilexWSClientR:::configWS))
     }
 }
 
 ##' @title connectToOpenSILEX
 ##' @param url character, if apiID is private add the url of the chosen API, containing the IP,
 ##'            the full url with the protocol. e.g. 'http://www.opensilex.org/openSilexAPI/rest/'
-##' @param username login of the user to create the token
+##' @param identifier login of the user to create the token
 ##' @param password password of the user to create the token
 ##' @param reconnection to force the client reconnection
 ##' @import opensilexWSClientR
@@ -100,15 +100,15 @@ checkAuthorization <-function(){
 ##' and execute the function.
 ##' Demonstration instances :
 ##' \describe{
-##' connectToOpenSILEX(username="guest@opensilex.org",password="guest",
+##' connectToOpenSILEX(identifier="guest@opensilex.org",password="guest",
 ##' url = "http://www.opensilex.org/openSilexAPI/rest/")
 ##' }
 ##' @export
-connectToOpenSILEX<-function(username = NULL, password = NULL, url = NULL, reconnection = TRUE){
+connectToOpenSILEX<-function(identifier = NULL, password = NULL, url = NULL, reconnection = TRUE){
   # configWS is an environment with specific variables to opensilex web service
   # if apiID is private, we use the url given by the user
-  if (is.null(username)) {
-    stop("Please, give an username")
+  if (is.null(identifier)) {
+    stop("Please, give an identifier")
   }
   if (is.null(password)) {
     stop("Please, give an user password")
@@ -116,7 +116,7 @@ connectToOpenSILEX<-function(username = NULL, password = NULL, url = NULL, recon
   if(is.null(url)){
     stop("Please, give an OpenSILEX WS full URL")
   }
-  opensilexWSClientR::connectToOpenSILEXWS(username = username,
+  opensilexWSClientR::connectToOpenSILEXWS(identifier = username,
                                            password = password,
                                            url = url)
 

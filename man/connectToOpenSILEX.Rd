@@ -4,11 +4,11 @@
 \alias{connectToOpenSILEX}
 \title{connectToOpenSILEX}
 \usage{
-connectToOpenSILEX(username = NULL, password = NULL, url = NULL,
+connectToOpenSILEX(identifier = NULL, password = NULL, url = NULL,
   reconnection = TRUE)
 }
 \arguments{
-\item{username}{login of the user to create the token}
+\item{identifier}{login of the user to create the token}
 
 \item{password}{password of the user to create the token}
 
@@ -24,7 +24,7 @@ In the case of a WebService change of address or a renaming of services, please 
 and execute the function.
 Demonstration instances :
 \describe{
-connectToOpenSILEX(username="guest@opensilex.org",password="guest",
+connectToOpenSILEX(identifier="guest@opensilex.org",password="guest",
 url = "http://www.opensilex.org/openSilexAPI/rest/")
 }
 }
