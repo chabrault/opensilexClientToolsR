@@ -39,10 +39,10 @@ install(".")
 ```R
 library(opensilexClientToolsR)
 # Le chargement a nécessité le package : opensilexWSClientR
-opensilexClientToolsR::connectToOpenSILEX(apiID="ws_private",username="guest@opensilex.org",password="guest", url = "https://localhost/")
+opensilexClientToolsR::connectToOpenSILEX( identifier="guest@opensilex.org",password="guest", url = "https://localhost:8666/rest")
 # 2019-10-04 10:05:40 INFO::Query executed and data recovered - WS2
 annoService <- AnnotationsApi$new()
-# create Annotations
+# create Annotations
 newAnnotation <- AnnotationDTO$new()
 newAnnotation$creator <- "http://www.phenome-fppn.fr/mtp/id/agent/admin_opensilex"
 newAnnotation$targets <- list("http://www.phenome-fppn.fr/test/id/event/99fe49a7-37e0-4b98-978e-132288172d35")
