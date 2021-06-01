@@ -81,9 +81,9 @@ ProfileUpdateDTO <- R6::R6Class(
            "name": %s,
            "credentials": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`credentials`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`credentials`) || length(self$`credentials`) == 0, "" ,lapply(self$`credentials`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(ProfileUpdateDTOJson) {

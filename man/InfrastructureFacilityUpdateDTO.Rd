@@ -23,6 +23,8 @@ InfrastructureFacilityUpdateDTO Class
 \item{\code{name}}{}
 
 \item{\code{organisation}}{}
+
+\item{\code{relations}}{}
 }}
 
 \keyword{datasets}

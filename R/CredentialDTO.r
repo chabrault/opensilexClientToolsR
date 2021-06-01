@@ -64,8 +64,8 @@ CredentialDTO <- R6::R6Class(
            "id": %s,
            "name": %s
         }',
-        jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`id`), "null",jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(CredentialDTOJson) {

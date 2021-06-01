@@ -116,15 +116,15 @@ DataCSVValidationDTO <- R6::R6Class(
         '{
            "errors": %s,
            "dataErrors": %s,
-           "sizeMax": %d,
+           "sizeMax": %s,
            "validation_token": %s,
-           "nb_lines_imported": %d
+           "nb_lines_imported": %s
         }',
-        self$`errors`$toJSON(),
-        self$`dataErrors`$toJSON(),
-        jsonlite::toJSON(self$`sizeMax`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`validation_token`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`nb_lines_imported`,auto_unbox=TRUE, null = "null")
+        jsonlite::toJSON(self$`errors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`dataErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`sizeMax`), "null",as.numeric(jsonlite::toJSON(self$`sizeMax`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`validation_token`), "null",jsonlite::toJSON(self$`validation_token`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`nb_lines_imported`), "null",as.numeric(jsonlite::toJSON(self$`nb_lines_imported`,auto_unbox=TRUE, null = "null")))
       )
     },
     fromJSONString = function(DataCSVValidationDTOJson) {

@@ -103,10 +103,10 @@ ThemeConfigDTO <- R6::R6Class(
            "iconClassesRDF": %s,
            "componentOverrides": %s
         }',
-        jsonlite::toJSON(self$`hasStyle`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`hasStyle`), "null",jsonlite::toJSON(self$`hasStyle`,auto_unbox=TRUE, null = "null")),
         fontsList,
-        jsonlite::toJSON(self$`iconClassesRDF`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`componentOverrides`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`iconClassesRDF`), "null",jsonlite::toJSON(self$`iconClassesRDF`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`componentOverrides`), "null",jsonlite::toJSON(self$`componentOverrides`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ThemeConfigDTOJson) {

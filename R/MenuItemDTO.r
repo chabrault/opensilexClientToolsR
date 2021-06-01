@@ -110,10 +110,10 @@ MenuItemDTO <- R6::R6Class(
            "children": [%s],
            "route": %s
         }',
-        jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`label`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`id`), "null",jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`label`), "null",jsonlite::toJSON(self$`label`,auto_unbox=TRUE, null = "null")),
         childrenList,
-        self$`route`$toJSON()
+        jsonlite::toJSON(self$`route`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(MenuItemDTOJson) {

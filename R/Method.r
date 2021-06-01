@@ -148,13 +148,13 @@ Method <- R6::R6Class(
            "reference": %s,
            "class": %s
         }',
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`formula`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`methodDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`methodName`,auto_unbox=TRUE, null = "null"),
-        self$`ontologyReference`$toJSON(),
-        jsonlite::toJSON(self$`reference`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`class`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`formula`), "null",jsonlite::toJSON(self$`formula`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`methodDbId`), "null",jsonlite::toJSON(self$`methodDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`methodName`), "null",jsonlite::toJSON(self$`methodName`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`ontologyReference`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`reference`), "null",jsonlite::toJSON(self$`reference`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`class`), "null",jsonlite::toJSON(self$`class`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(MethodJson) {

@@ -226,17 +226,17 @@ VueRDFTypeDTO <- R6::R6Class(
            "object_properties": [%s],
            "properties_order": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`icon`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name_translations`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment_translations`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_abstract`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment`), "null",jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`parent`), "null",jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`icon`), "null",jsonlite::toJSON(self$`icon`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name_translations`), "null",jsonlite::toJSON(self$`name_translations`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment_translations`), "null",jsonlite::toJSON(self$`comment_translations`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_abstract`), "null",jsonlite::toJSON(self$`is_abstract`,auto_unbox=TRUE, null = "null")),
         data_propertiesList,
         object_propertiesList,
-        lapply(self$`properties_order`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`properties_order`) || length(self$`properties_order`) == 0, "" ,lapply(self$`properties_order`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(VueRDFTypeDTOJson) {

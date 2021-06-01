@@ -133,12 +133,12 @@ AnnotationGetDTO <- R6::R6Class(
            "created": %s,
            "author": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        self$`motivation`$toJSON(),
-        jsonlite::toJSON(self$`created`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`author`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`targets`) || length(self$`targets`) == 0, "" ,lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        jsonlite::toJSON(self$`motivation`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`created`), "null",jsonlite::toJSON(self$`created`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`author`), "null",jsonlite::toJSON(self$`author`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(AnnotationGetDTOJson) {

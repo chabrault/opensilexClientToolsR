@@ -111,16 +111,16 @@ PositionCreationDTO <- R6::R6Class(
        sprintf(
         '{
            "point": %s,
-           "x": %d,
-           "y": %d,
-           "z": %d,
+           "x": %s,
+           "y": %s,
+           "z": %s,
            "text": %s
         }',
-        self$`point`$toJSON(),
-        jsonlite::toJSON(self$`x`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`y`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`z`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`text`,auto_unbox=TRUE, null = "null")
+        jsonlite::toJSON(self$`point`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`x`), "null",as.numeric(jsonlite::toJSON(self$`x`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`y`), "null",as.numeric(jsonlite::toJSON(self$`y`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`z`), "null",as.numeric(jsonlite::toJSON(self$`z`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`text`), "null",jsonlite::toJSON(self$`text`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(PositionCreationDTOJson) {

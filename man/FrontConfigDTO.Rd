@@ -39,6 +39,8 @@ FrontConfigDTO Class
 \item{\code{openIDAuthenticationURI}}{}
 
 \item{\code{openIDConnectionTitle}}{}
+
+\item{\code{activateResetPassword}}{}
 }}
 
 \keyword{datasets}

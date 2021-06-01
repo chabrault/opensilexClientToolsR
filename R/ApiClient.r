@@ -82,14 +82,16 @@ checkAuthorization <-function(){
       stop("You must first connect to an OpenSILEX Instance using connectToOpenSILEXWS() function")
     }
 
-    if(get("IDENTIFIER",opensilexWSClientR:::configWS) != "" && get("PASSWORD",opensilexWSClientR:::configWS) != "" && get("BASE_PATH",opensilexWSClientR:::configWS)  != ""){
+    if(!is.null(get("IDENTIFIER",opensilexWSClientR:::configWS))
+     && !is.null(get("PASSWORD",opensilexWSClientR:::configWS)) 
+     && !is.null(get("BASE_PATH",opensilexWSClientR:::configWS))){
       connectToOpenSILEXWS(get("IDENTIFIER",opensilexWSClientR:::configWS),get("PASSWORD",opensilexWSClientR:::configWS),get("BASE_PATH",opensilexWSClientR:::configWS))
     }
 }
 
 ##' @title connectToOpenSILEX
 ##' @param url character, if apiID is private add the url of the chosen API, containing the IP,
-##'            the full url with the protocol. e.g. 'http://www.opensilex.org/openSilexAPI/rest/'
+##'            the full url with the protocol. e.g. 'http://www.opensilex.org/openSilexAPI/rest'
 ##' @param identifier login of the user to create the token
 ##' @param password password of the user to create the token
 ##' @param reconnection to force the client reconnection
@@ -101,7 +103,7 @@ checkAuthorization <-function(){
 ##' Demonstration instances :
 ##' \describe{
 ##' connectToOpenSILEX(identifier="guest@opensilex.org",password="guest",
-##' url = "http://www.opensilex.org/openSilexAPI/rest/")
+##' url = "http://www.opensilex.org/openSilexAPI/rest")
 ##' }
 ##' @export
 connectToOpenSILEX<-function(identifier = NULL, password = NULL, url = NULL, reconnection = TRUE){
@@ -116,23 +118,9 @@ connectToOpenSILEX<-function(identifier = NULL, password = NULL, url = NULL, rec
   if(is.null(url)){
     stop("Please, give an OpenSILEX WS full URL")
   }
-  opensilexWSClientR::connectToOpenSILEXWS(identifier = username,
+  opensilexWSClientR::connectToOpenSILEXWS(identifier = identifier,
                                            password = password,
                                            url = url)
 
 }
 
-configWS<-new.env(emptyenv())
-
-.onLoad <- function(libname, pkgname){
-
-  # connectToPHIS parameters
-  # assign("WS_1_PUBLIC_PATH","http://147.100.179.156:8080/phenomeapi/resources/", configWS)
-  # assign("WS_1_PUBLIC_USERNAME","guestphis@supagro.inra.fr", configWS)
-  # assign("WS_1_PUBLIC_PASSWORD","guestphis", configWS)
-  # 
-  # assign("WS_2_PUBLIC_PATH","http://www.opensilex.org/openSilexAPI/rest/", configWS)
-  # assign("WS_2_PUBLIC_USERNAME","guest@opensilex.org", configWS)
-  # assign("WS_2_PUBLIC_PASSWORD","guest", configWS)
-
-}

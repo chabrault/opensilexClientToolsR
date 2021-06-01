@@ -49,7 +49,7 @@ URIsListPostDTO <- R6::R6Class(
         '{
            "uris": [%s]
         }',
-        lapply(self$`uris`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`uris`) || length(self$`uris`) == 0, "" ,lapply(self$`uris`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(URIsListPostDTOJson) {

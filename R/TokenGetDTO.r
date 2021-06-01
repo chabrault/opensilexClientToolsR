@@ -48,7 +48,7 @@ TokenGetDTO <- R6::R6Class(
         '{
            "token": %s
         }',
-        jsonlite::toJSON(self$`token`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`token`), "null",jsonlite::toJSON(self$`token`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(TokenGetDTOJson) {

@@ -121,19 +121,19 @@ CSVURINotFoundError <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "rowIndex": %d,
-           "colIndex": %d,
+           "rowIndex": %s,
+           "colIndex": %s,
            "header": %s,
            "value": %s,
            "rdfType": %s,
            "objectURI": %s
         }',
-        jsonlite::toJSON(self$`rowIndex`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`colIndex`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`header`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`value`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdfType`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`objectURI`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`rowIndex`), "null",as.numeric(jsonlite::toJSON(self$`rowIndex`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`colIndex`), "null",as.numeric(jsonlite::toJSON(self$`colIndex`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`header`), "null",jsonlite::toJSON(self$`header`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`value`), "null",jsonlite::toJSON(self$`value`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdfType`), "null",jsonlite::toJSON(self$`rdfType`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`objectURI`), "null",jsonlite::toJSON(self$`objectURI`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(CSVURINotFoundErrorJson) {

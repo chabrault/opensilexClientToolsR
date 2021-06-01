@@ -68,8 +68,8 @@ StatusDTO <- R6::R6Class(
            "message": %s,
            "messageType": %s
         }',
-        jsonlite::toJSON(self$`message`,auto_unbox=TRUE, null = "null"),
-        self$`messageType`$toJSON()
+        ifelse(is.null(self$`message`), "null",jsonlite::toJSON(self$`message`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`messageType`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(StatusDTOJson) {

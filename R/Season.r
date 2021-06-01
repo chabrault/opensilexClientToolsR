@@ -78,11 +78,11 @@ Season <- R6::R6Class(
         '{
            "season": %s,
            "seasonDbId": %s,
-           "year": %d
+           "year": %s
         }',
-        jsonlite::toJSON(self$`season`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`seasonDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`year`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`season`), "null",jsonlite::toJSON(self$`season`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`seasonDbId`), "null",jsonlite::toJSON(self$`seasonDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`year`), "null",as.numeric(jsonlite::toJSON(self$`year`,auto_unbox=TRUE, null = "null")))
       )
     },
     fromJSONString = function(SeasonJson) {

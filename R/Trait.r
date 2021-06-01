@@ -246,19 +246,19 @@ Trait <- R6::R6Class(
            "xref": %s,
            "class": %s
         }',
-        lapply(self$`alternativeAbbreviations`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`attribute`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`entity`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`mainAbbreviation`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        self$`ontologyReference`$toJSON(),
-        jsonlite::toJSON(self$`status`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`synonyms`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`traitDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`traitName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`xref`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`class`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`alternativeAbbreviations`) || length(self$`alternativeAbbreviations`) == 0, "" ,lapply(self$`alternativeAbbreviations`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`attribute`), "null",jsonlite::toJSON(self$`attribute`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`entity`), "null",jsonlite::toJSON(self$`entity`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`mainAbbreviation`), "null",jsonlite::toJSON(self$`mainAbbreviation`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`ontologyReference`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`status`), "null",jsonlite::toJSON(self$`status`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`synonyms`) || length(self$`synonyms`) == 0, "" ,lapply(self$`synonyms`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`traitDbId`), "null",jsonlite::toJSON(self$`traitDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`traitName`), "null",jsonlite::toJSON(self$`traitName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`xref`), "null",jsonlite::toJSON(self$`xref`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`class`), "null",jsonlite::toJSON(self$`class`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(TraitJson) {

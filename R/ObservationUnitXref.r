@@ -64,8 +64,8 @@ ObservationUnitXref <- R6::R6Class(
            "id": %s,
            "source": %s
         }',
-        jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`source`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`id`), "null",jsonlite::toJSON(self$`id`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`source`), "null",jsonlite::toJSON(self$`source`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ObservationUnitXrefJson) {

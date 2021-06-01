@@ -128,12 +128,12 @@ GermplasmGetAllDTO <- R6::R6Class(
            "species": %s,
            "species_name": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`species`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`species_name`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type_name`), "null",jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`species`), "null",jsonlite::toJSON(self$`species`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`species_name`), "null",jsonlite::toJSON(self$`species_name`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(GermplasmGetAllDTOJson) {

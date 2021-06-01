@@ -203,17 +203,17 @@ VueRDFTypePropertyDTO <- R6::R6Class(
            "is_required": %s,
            "is_custom": %s
         }',
-        jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`inherited`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`target_property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`input_components_by_property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_list`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_required`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_custom`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`property`), "null",jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment`), "null",jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`inherited`), "null",jsonlite::toJSON(self$`inherited`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`target_property`), "null",jsonlite::toJSON(self$`target_property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`input_component`), "null",jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`input_components_by_property`), "null",jsonlite::toJSON(self$`input_components_by_property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`view_component`), "null",jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_list`), "null",jsonlite::toJSON(self$`is_list`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_required`), "null",jsonlite::toJSON(self$`is_required`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_custom`), "null",jsonlite::toJSON(self$`is_custom`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(VueRDFTypePropertyDTOJson) {

@@ -82,9 +82,9 @@ GeoJsonObject <- R6::R6Class(
            "bbox": [%s],
            "coordinates": [%s]
         }',
-        jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`bbox`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`coordinates`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`type`), "null",jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`bbox`) || length(self$`bbox`) == 0, "" ,lapply(self$`bbox`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`coordinates`) || length(self$`coordinates`) == 0, "" ,lapply(self$`coordinates`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(GeoJsonObjectJson) {

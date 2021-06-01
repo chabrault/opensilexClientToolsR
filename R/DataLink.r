@@ -96,10 +96,10 @@ DataLink <- R6::R6Class(
            "type": %s,
            "url": %s
         }',
-        jsonlite::toJSON(self$`dataLinkName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`url`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`dataLinkName`), "null",jsonlite::toJSON(self$`dataLinkName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`type`), "null",jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`url`), "null",jsonlite::toJSON(self$`url`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(DataLinkJson) {

@@ -90,8 +90,8 @@ CredentialsGroupDTO <- R6::R6Class(
            "group_key_name": %s,
            "credentials": [%s]
         }',
-        jsonlite::toJSON(self$`group_id`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`group_key_name`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`group_id`), "null",jsonlite::toJSON(self$`group_id`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`group_key_name`), "null",jsonlite::toJSON(self$`group_key_name`,auto_unbox=TRUE, null = "null")),
         credentialsList
       )
     },

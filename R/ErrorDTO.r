@@ -64,8 +64,8 @@ ErrorDTO <- R6::R6Class(
            "title": %s,
            "message": %s
         }',
-        jsonlite::toJSON(self$`title`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`message`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`title`), "null",jsonlite::toJSON(self$`title`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`message`), "null",jsonlite::toJSON(self$`message`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ErrorDTOJson) {

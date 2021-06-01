@@ -68,8 +68,8 @@ Crs <- R6::R6Class(
            "type": %s,
            "properties": %s
         }',
-        jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null"),
-        self$`properties`$toJSON()
+        ifelse(is.null(self$`type`), "null",jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`properties`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(CrsJson) {

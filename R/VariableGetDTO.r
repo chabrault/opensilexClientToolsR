@@ -144,12 +144,12 @@ VariableGetDTO <- R6::R6Class(
            "method": %s,
            "unit": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        self$`entity`$toJSON(),
-        self$`characteristic`$toJSON(),
-        self$`method`$toJSON(),
-        self$`unit`$toJSON()
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`entity`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`characteristic`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`method`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`unit`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(VariableGetDTOJson) {

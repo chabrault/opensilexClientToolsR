@@ -65,8 +65,8 @@ ScientificObjectCsvExportDTO <- R6::R6Class(
            "uris": [%s],
            "experiment": %s
         }',
-        lapply(self$`uris`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`experiment`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uris`) || length(self$`uris`) == 0, "" ,lapply(self$`uris`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`experiment`), "null",jsonlite::toJSON(self$`experiment`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ScientificObjectCsvExportDTOJson) {

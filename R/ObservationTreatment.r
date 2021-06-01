@@ -64,8 +64,8 @@ ObservationTreatment <- R6::R6Class(
            "factor": %s,
            "modality": %s
         }',
-        jsonlite::toJSON(self$`factor`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`modality`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`factor`), "null",jsonlite::toJSON(self$`factor`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`modality`), "null",jsonlite::toJSON(self$`modality`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ObservationTreatmentJson) {

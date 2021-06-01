@@ -14,6 +14,7 @@
 #' @field rdf_type_name 
 #' @field name 
 #' @field organisation 
+#' @field relations 
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -26,7 +27,8 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
     `rdf_type_name` = NULL,
     `name` = NULL,
     `organisation` = NULL,
-    initialize = function(`uri`, `rdf_type`, `rdf_type_name`, `name`, `organisation`){
+    `relations` = NULL,
+    initialize = function(`uri`, `rdf_type`, `rdf_type_name`, `name`, `organisation`, `relations`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -47,6 +49,11 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
         stopifnot(is.character(`organisation`), length(`organisation`) == 1)
         self$`organisation` <- `organisation`
       }
+      if (!missing(`relations`)) {
+        stopifnot(is.list(`relations`), length(`relations`) != 0)
+        lapply(`relations`, function(x) stopifnot(R6::is.R6(x)))
+        self$`relations` <- `relations`
+      }
     },
     toJSON = function() {
       InfrastructureFacilityUpdateDTOObject <- list()
@@ -64,6 +71,9 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
       }
       if (!is.null(self$`organisation`)) {
         InfrastructureFacilityUpdateDTOObject[['organisation']] <- self$`organisation`
+      }
+      if (!is.null(self$`relations`)) {
+        InfrastructureFacilityUpdateDTOObject[['relations']] <- lapply(self$`relations`, function(x) x$toJSON())
       }
 
       InfrastructureFacilityUpdateDTOObject
@@ -85,6 +95,13 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
       if (!is.null(InfrastructureFacilityUpdateDTOObject$`organisation`)) {
         self$`organisation` <- InfrastructureFacilityUpdateDTOObject$`organisation`
       }
+      if (!is.null(InfrastructureFacilityUpdateDTOObject$`relations`)) {
+        self$`relations` <- lapply(InfrastructureFacilityUpdateDTOObject$`relations`, function(x) {
+          relationsObject <- RDFObjectRelationDTO$new()
+          relationsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          relationsObject
+        })
+      }
     },
     fromJSONObject = function(InfrastructureFacilityUpdateDTOObject) {
       if (!is.null(InfrastructureFacilityUpdateDTOObject$`uri`)) {
@@ -102,21 +119,31 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
       if (!is.null(InfrastructureFacilityUpdateDTOObject$`organisation`)) {
         self$`organisation` <- InfrastructureFacilityUpdateDTOObject$`organisation`
       }
+      if (!is.null(InfrastructureFacilityUpdateDTOObject$`relations`)) {
+        self$`relations` <- lapply(InfrastructureFacilityUpdateDTOObject$`relations`, function(x) {
+          relationsObject <- RDFObjectRelationDTO$new()
+          relationsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          relationsObject
+        })
+      }
     },
     toJSONString = function() {
+      relationsList = paste(lapply(self$`relations`, function(x) x$toJSONString()),collapse = ",")
        sprintf(
         '{
            "uri": %s,
            "rdf_type": %s,
            "rdf_type_name": %s,
            "name": %s,
-           "organisation": %s
+           "organisation": %s,
+           "relations": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`organisation`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type_name`), "null",jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`organisation`), "null",jsonlite::toJSON(self$`organisation`,auto_unbox=TRUE, null = "null")),
+        relationsList
       )
     },
     fromJSONString = function(InfrastructureFacilityUpdateDTOJson) {
@@ -126,6 +153,7 @@ InfrastructureFacilityUpdateDTO <- R6::R6Class(
       self$`rdf_type_name` <- InfrastructureFacilityUpdateDTOObject$`rdf_type_name`
       self$`name` <- InfrastructureFacilityUpdateDTOObject$`name`
       self$`organisation` <- InfrastructureFacilityUpdateDTOObject$`organisation`
+      self$`relations` <- lapply(InfrastructureFacilityUpdateDTOObject$`relations`, function(x) RDFObjectRelationDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
     }
   )
 )

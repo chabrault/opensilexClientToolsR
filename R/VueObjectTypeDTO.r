@@ -147,13 +147,13 @@ VueObjectTypeDTO <- R6::R6Class(
            "view_component": %s,
            "rdf_type": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`short_uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`input_components_by_property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null"),
-        self$`rdf_type`$toJSON()
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`short_uri`), "null",jsonlite::toJSON(self$`short_uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`input_component`), "null",jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`input_components_by_property`), "null",jsonlite::toJSON(self$`input_components_by_property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`view_component`), "null",jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`rdf_type`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(VueObjectTypeDTOJson) {

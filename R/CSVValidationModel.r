@@ -204,15 +204,15 @@ CSVValidationModel <- R6::R6Class(
            "alreadyExistingURIErrors": %s,
            "duplicateURIErrors": %s
         }',
-        lapply(self$`missingHeaders`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`invalidHeaderURIs`,auto_unbox=TRUE, null = "null"),
-        self$`datatypeErrors`$toJSON(),
-        self$`uriNotFoundErrors`$toJSON(),
-        self$`invalidURIErrors`$toJSON(),
-        self$`missingRequiredValueErrors`$toJSON(),
-        self$`invalidValueErrors`$toJSON(),
-        self$`alreadyExistingURIErrors`$toJSON(),
-        self$`duplicateURIErrors`$toJSON()
+        ifelse(is.null(self$`missingHeaders`) || length(self$`missingHeaders`) == 0, "" ,lapply(self$`missingHeaders`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`invalidHeaderURIs`), "null",jsonlite::toJSON(self$`invalidHeaderURIs`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`datatypeErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`uriNotFoundErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`invalidURIErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`missingRequiredValueErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`invalidValueErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`alreadyExistingURIErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`duplicateURIErrors`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(CSVValidationModelJson) {

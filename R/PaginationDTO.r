@@ -91,15 +91,15 @@ PaginationDTO <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "pageSize": %d,
-           "currentPage": %d,
-           "totalCount": %d,
-           "totalPages": %d
+           "pageSize": %s,
+           "currentPage": %s,
+           "totalCount": %s,
+           "totalPages": %s
         }',
-        jsonlite::toJSON(self$`pageSize`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`currentPage`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`totalCount`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`totalPages`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`pageSize`), "null",as.numeric(jsonlite::toJSON(self$`pageSize`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`currentPage`), "null",as.numeric(jsonlite::toJSON(self$`currentPage`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`totalCount`), "null",as.numeric(jsonlite::toJSON(self$`totalCount`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`totalPages`), "null",as.numeric(jsonlite::toJSON(self$`totalPages`,auto_unbox=TRUE, null = "null")))
       )
     },
     fromJSONString = function(PaginationDTOJson) {

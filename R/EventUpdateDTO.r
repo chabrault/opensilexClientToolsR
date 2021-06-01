@@ -170,13 +170,13 @@ EventUpdateDTO <- R6::R6Class(
            "targets": [%s],
            "relations": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`start`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`end`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_instant`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=",")),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`start`), "null",jsonlite::toJSON(self$`start`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`end`), "null",jsonlite::toJSON(self$`end`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_instant`), "null",jsonlite::toJSON(self$`is_instant`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`targets`) || length(self$`targets`) == 0, "" ,lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=","))),
         relationsList
       )
     },

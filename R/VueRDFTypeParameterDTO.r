@@ -79,9 +79,9 @@ VueRDFTypeParameterDTO <- R6::R6Class(
            "icon": %s,
            "is_abstract": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`icon`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`is_abstract`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`icon`), "null",jsonlite::toJSON(self$`icon`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`is_abstract`), "null",jsonlite::toJSON(self$`is_abstract`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(VueRDFTypeParameterDTOJson) {

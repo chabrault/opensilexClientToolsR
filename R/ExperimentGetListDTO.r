@@ -160,14 +160,14 @@ ExperimentGetListDTO <- R6::R6Class(
            "species": [%s],
            "is_public": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`start_date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`end_date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`objective`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`species`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`is_public`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`start_date`), "null",jsonlite::toJSON(self$`start_date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`end_date`), "null",jsonlite::toJSON(self$`end_date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`objective`), "null",jsonlite::toJSON(self$`objective`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`species`) || length(self$`species`) == 0, "" ,lapply(self$`species`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`is_public`), "null",jsonlite::toJSON(self$`is_public`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ExperimentGetListDTOJson) {

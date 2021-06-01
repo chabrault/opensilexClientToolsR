@@ -31,10 +31,16 @@ authenticate Authenticate a user and return an access token
 authenticate_open_id Authenticate a user and return an access token
 
 
+forgot_password Send an e-mail confirmation
+
+
 get_credentials_groups Get list of existing credentials indexed by Swagger @API concepts in the application
 
 
 logout Logout by discarding a user token
+
+
+renew_password Update user password
 
 
 renew_token Send back a new token if the provided one is still valid

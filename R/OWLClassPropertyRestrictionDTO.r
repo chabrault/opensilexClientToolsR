@@ -110,11 +110,11 @@ OWLClassPropertyRestrictionDTO <- R6::R6Class(
            "rdf_type": %s,
            "domain": %s
         }',
-        jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`required`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`list`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`domain`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`property`), "null",jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`required`), "null",jsonlite::toJSON(self$`required`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`list`), "null",jsonlite::toJSON(self$`list`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`domain`), "null",jsonlite::toJSON(self$`domain`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(OWLClassPropertyRestrictionDTOJson) {

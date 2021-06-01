@@ -46,9 +46,9 @@ DataConfidenceDTO <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "confidence": %d
+           "confidence": %s
         }',
-        jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`confidence`), "null",as.numeric(jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null")))
       )
     },
     fromJSONString = function(DataConfidenceDTOJson) {

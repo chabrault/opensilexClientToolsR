@@ -95,9 +95,9 @@ MetadataDTO <- R6::R6Class(
            "status": [%s],
            "datafiles": [%s]
         }',
-        self$`pagination`$toJSON(),
+        jsonlite::toJSON(self$`pagination`$toJSON(),auto_unbox=TRUE, null = "null"),
         statusList,
-        lapply(self$`datafiles`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`datafiles`) || length(self$`datafiles`) == 0, "" ,lapply(self$`datafiles`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(MetadataDTOJson) {

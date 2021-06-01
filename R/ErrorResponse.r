@@ -72,8 +72,8 @@ ErrorResponse <- R6::R6Class(
            "metadata": %s,
            "result": %s
         }',
-        self$`metadata`$toJSON(),
-        self$`result`$toJSON()
+        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`result`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(ErrorResponseJson) {

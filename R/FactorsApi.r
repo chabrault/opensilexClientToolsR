@@ -78,7 +78,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -125,7 +125,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -163,7 +163,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -180,7 +180,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -218,7 +218,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -235,7 +235,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -273,7 +273,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -290,7 +290,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -328,7 +328,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -345,7 +345,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -383,7 +383,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -400,7 +400,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -438,7 +438,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -455,7 +455,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -493,7 +493,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -510,7 +510,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -548,7 +548,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -565,7 +565,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`accept_language`)) {
@@ -604,7 +604,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -621,7 +621,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -671,7 +671,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -688,7 +688,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -750,7 +750,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -767,7 +767,7 @@ FactorsApi <- R6::R6Class(
       headerParams <- character()
       self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
       if(self$apiClient$basePath == ""){
-        stop("Wrong you must first connect with connectToPHISWS")
+        stop("Wrong you must first connect with connectToOpenSILEX")
       }
       
       #if (!missing(`authorization`)) {
@@ -813,7 +813,7 @@ FactorsApi <- R6::R6Class(
         }
         if(method == "POST" || method == "PUT"){
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-          return(Response$new(json$metadata, json$result$datafiles, resp, TRUE))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))

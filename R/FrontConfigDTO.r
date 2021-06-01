@@ -22,6 +22,7 @@
 #' @field themeName 
 #' @field openIDAuthenticationURI 
 #' @field openIDConnectionTitle 
+#' @field activateResetPassword 
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -42,7 +43,8 @@ FrontConfigDTO <- R6::R6Class(
     `themeName` = NULL,
     `openIDAuthenticationURI` = NULL,
     `openIDConnectionTitle` = NULL,
-    initialize = function(`pathPrefix`, `homeComponent`, `notFoundComponent`, `headerComponent`, `loginComponent`, `menuComponent`, `footerComponent`, `menu`, `routes`, `themeModule`, `themeName`, `openIDAuthenticationURI`, `openIDConnectionTitle`){
+    `activateResetPassword` = NULL,
+    initialize = function(`pathPrefix`, `homeComponent`, `notFoundComponent`, `headerComponent`, `loginComponent`, `menuComponent`, `footerComponent`, `menu`, `routes`, `themeModule`, `themeName`, `openIDAuthenticationURI`, `openIDConnectionTitle`, `activateResetPassword`){
       if (!missing(`pathPrefix`)) {
         stopifnot(is.character(`pathPrefix`), length(`pathPrefix`) == 1)
         self$`pathPrefix` <- `pathPrefix`
@@ -97,6 +99,9 @@ FrontConfigDTO <- R6::R6Class(
         stopifnot(is.character(`openIDConnectionTitle`), length(`openIDConnectionTitle`) == 1)
         self$`openIDConnectionTitle` <- `openIDConnectionTitle`
       }
+      if (!missing(`activateResetPassword`)) {
+        self$`activateResetPassword` <- `activateResetPassword`
+      }
     },
     toJSON = function() {
       FrontConfigDTOObject <- list()
@@ -138,6 +143,9 @@ FrontConfigDTO <- R6::R6Class(
       }
       if (!is.null(self$`openIDConnectionTitle`)) {
         FrontConfigDTOObject[['openIDConnectionTitle']] <- self$`openIDConnectionTitle`
+      }
+      if (!is.null(self$`activateResetPassword`)) {
+        FrontConfigDTOObject[['activateResetPassword']] <- self$`activateResetPassword`
       }
 
       FrontConfigDTOObject
@@ -191,6 +199,9 @@ FrontConfigDTO <- R6::R6Class(
       if (!is.null(FrontConfigDTOObject$`openIDConnectionTitle`)) {
         self$`openIDConnectionTitle` <- FrontConfigDTOObject$`openIDConnectionTitle`
       }
+      if (!is.null(FrontConfigDTOObject$`activateResetPassword`)) {
+        self$`activateResetPassword` <- FrontConfigDTOObject$`activateResetPassword`
+      }
     },
     fromJSONObject = function(FrontConfigDTOObject) {
       if (!is.null(FrontConfigDTOObject$`pathPrefix`)) {
@@ -240,6 +251,9 @@ FrontConfigDTO <- R6::R6Class(
       if (!is.null(FrontConfigDTOObject$`openIDConnectionTitle`)) {
         self$`openIDConnectionTitle` <- FrontConfigDTOObject$`openIDConnectionTitle`
       }
+      if (!is.null(FrontConfigDTOObject$`activateResetPassword`)) {
+        self$`activateResetPassword` <- FrontConfigDTOObject$`activateResetPassword`
+      }
     },
     toJSONString = function() {
       menuList = paste(lapply(self$`menu`, function(x) x$toJSONString()),collapse = ",")
@@ -258,21 +272,23 @@ FrontConfigDTO <- R6::R6Class(
            "themeModule": %s,
            "themeName": %s,
            "openIDAuthenticationURI": %s,
-           "openIDConnectionTitle": %s
+           "openIDConnectionTitle": %s,
+           "activateResetPassword": %s
         }',
-        jsonlite::toJSON(self$`pathPrefix`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`homeComponent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`notFoundComponent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`headerComponent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`loginComponent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`menuComponent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`footerComponent`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`pathPrefix`), "null",jsonlite::toJSON(self$`pathPrefix`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`homeComponent`), "null",jsonlite::toJSON(self$`homeComponent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`notFoundComponent`), "null",jsonlite::toJSON(self$`notFoundComponent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`headerComponent`), "null",jsonlite::toJSON(self$`headerComponent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`loginComponent`), "null",jsonlite::toJSON(self$`loginComponent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`menuComponent`), "null",jsonlite::toJSON(self$`menuComponent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`footerComponent`), "null",jsonlite::toJSON(self$`footerComponent`,auto_unbox=TRUE, null = "null")),
         menuList,
         routesList,
-        jsonlite::toJSON(self$`themeModule`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`themeName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`openIDAuthenticationURI`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`openIDConnectionTitle`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`themeModule`), "null",jsonlite::toJSON(self$`themeModule`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`themeName`), "null",jsonlite::toJSON(self$`themeName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`openIDAuthenticationURI`), "null",jsonlite::toJSON(self$`openIDAuthenticationURI`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`openIDConnectionTitle`), "null",jsonlite::toJSON(self$`openIDConnectionTitle`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`activateResetPassword`), "null",jsonlite::toJSON(self$`activateResetPassword`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(FrontConfigDTOJson) {
@@ -290,6 +306,7 @@ FrontConfigDTO <- R6::R6Class(
       self$`themeName` <- FrontConfigDTOObject$`themeName`
       self$`openIDAuthenticationURI` <- FrontConfigDTOObject$`openIDAuthenticationURI`
       self$`openIDConnectionTitle` <- FrontConfigDTOObject$`openIDConnectionTitle`
+      self$`activateResetPassword` <- FrontConfigDTOObject$`activateResetPassword`
     }
   )
 )

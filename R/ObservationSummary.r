@@ -132,12 +132,12 @@ ObservationSummary <- R6::R6Class(
            "observationVariableName": %s,
            "season": %s
         }',
-        jsonlite::toJSON(self$`collector`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`observationDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`observationTimeStamp`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`observationVariableDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`observationVariableName`,auto_unbox=TRUE, null = "null"),
-        self$`season`$toJSON()
+        ifelse(is.null(self$`collector`), "null",jsonlite::toJSON(self$`collector`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`observationDbId`), "null",jsonlite::toJSON(self$`observationDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`observationTimeStamp`), "null",jsonlite::toJSON(self$`observationTimeStamp`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`observationVariableDbId`), "null",jsonlite::toJSON(self$`observationVariableDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`observationVariableName`), "null",jsonlite::toJSON(self$`observationVariableName`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`season`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(ObservationSummaryJson) {

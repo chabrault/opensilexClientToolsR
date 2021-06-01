@@ -64,8 +64,8 @@ AuthenticationDTO <- R6::R6Class(
            "identifier": %s,
            "password": %s
         }',
-        jsonlite::toJSON(self$`identifier`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`password`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`identifier`), "null",jsonlite::toJSON(self$`identifier`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`password`), "null",jsonlite::toJSON(self$`password`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(AuthenticationDTOJson) {

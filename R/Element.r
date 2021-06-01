@@ -37,7 +37,11 @@ ObjectDTO  <- R6::R6Class(
       }
     },
     toJSON = function() {
-      jsonlite::toJSON(self$attribs, auto_unbox = TRUE)
+      if(is.null(self$attribs)){
+        NULL
+      }else{
+         jsonlite::toJSON(self$attribs, auto_unbox = TRUE)
+      } 
     }
   )
 )

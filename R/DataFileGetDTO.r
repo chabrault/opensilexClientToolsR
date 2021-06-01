@@ -153,13 +153,13 @@ DataFileGetDTO <- R6::R6Class(
            "provenance": %s,
            "metadata": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        self$`provenance`$toJSON(),
-        self$`metadata`$toJSON()
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`timezone`), "null",jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`scientific_objects`) || length(self$`scientific_objects`) == 0, "" ,lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        jsonlite::toJSON(self$`provenance`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(DataFileGetDTOJson) {

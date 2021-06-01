@@ -128,12 +128,12 @@ Contact <- R6::R6Class(
            "orcid": %s,
            "type": %s
         }',
-        jsonlite::toJSON(self$`contactDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`email`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`institutionName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`orcid`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`contactDbId`), "null",jsonlite::toJSON(self$`contactDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`email`), "null",jsonlite::toJSON(self$`email`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`institutionName`), "null",jsonlite::toJSON(self$`institutionName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`orcid`), "null",jsonlite::toJSON(self$`orcid`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`type`), "null",jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ContactJson) {

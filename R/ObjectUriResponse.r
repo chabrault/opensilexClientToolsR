@@ -68,8 +68,8 @@ ObjectUriResponse <- R6::R6Class(
            "metadata": %s,
            "result": %s
         }',
-        self$`metadata`$toJSON(),
-        jsonlite::toJSON(self$`result`,auto_unbox=TRUE, null = "null")
+        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`result`), "null",jsonlite::toJSON(self$`result`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ObjectUriResponseJson) {

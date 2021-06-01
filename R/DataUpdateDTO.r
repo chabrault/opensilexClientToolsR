@@ -185,19 +185,19 @@ DataUpdateDTO <- R6::R6Class(
            "scientific_objects": [%s],
            "variable": %s,
            "value": %s,
-           "confidence": %d,
+           "confidence": %s,
            "provenance": %s,
            "metadata": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`variable`,auto_unbox=TRUE, null = "null"),
-        self$`value`$toJSON(),
-        jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null"),
-        self$`provenance`$toJSON(),
-        self$`metadata`$toJSON()
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`timezone`), "null",jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`scientific_objects`) || length(self$`scientific_objects`) == 0, "" ,lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`variable`), "null",jsonlite::toJSON(self$`variable`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`value`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`confidence`), "null",as.numeric(jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null"))),
+        jsonlite::toJSON(self$`provenance`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(DataUpdateDTOJson) {

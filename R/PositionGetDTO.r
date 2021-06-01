@@ -124,11 +124,11 @@ PositionGetDTO <- R6::R6Class(
            "to": %s,
            "position": %s
         }',
-        jsonlite::toJSON(self$`event`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`move_time`,auto_unbox=TRUE, null = "null"),
-        self$`from`$toJSON(),
-        self$`to`$toJSON(),
-        self$`position`$toJSON()
+        ifelse(is.null(self$`event`), "null",jsonlite::toJSON(self$`event`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`move_time`), "null",jsonlite::toJSON(self$`move_time`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`from`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`to`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`position`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(PositionGetDTOJson) {

@@ -143,13 +143,13 @@ UserCreationDTO <- R6::R6Class(
            "password": %s,
            "admin": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`first_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`last_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`email`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`language`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`password`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`admin`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`first_name`), "null",jsonlite::toJSON(self$`first_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`last_name`), "null",jsonlite::toJSON(self$`last_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`email`), "null",jsonlite::toJSON(self$`email`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`language`), "null",jsonlite::toJSON(self$`language`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`password`), "null",jsonlite::toJSON(self$`password`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`admin`), "null",jsonlite::toJSON(self$`admin`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(UserCreationDTOJson) {

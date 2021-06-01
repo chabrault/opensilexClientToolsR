@@ -96,10 +96,10 @@ RDFTypeDTO <- R6::R6Class(
            "comment": %s,
            "parent": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment`), "null",jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`parent`), "null",jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(RDFTypeDTOJson) {

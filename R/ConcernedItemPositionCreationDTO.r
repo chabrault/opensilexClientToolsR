@@ -68,8 +68,8 @@ ConcernedItemPositionCreationDTO <- R6::R6Class(
            "target": %s,
            "position": %s
         }',
-        jsonlite::toJSON(self$`target`,auto_unbox=TRUE, null = "null"),
-        self$`position`$toJSON()
+        ifelse(is.null(self$`target`), "null",jsonlite::toJSON(self$`target`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`position`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(ConcernedItemPositionCreationDTOJson) {

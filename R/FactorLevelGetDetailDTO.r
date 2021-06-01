@@ -112,11 +112,11 @@ FactorLevelGetDetailDTO <- R6::R6Class(
            "factor": %s,
            "factor_name": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`factor`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`factor_name`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`factor`), "null",jsonlite::toJSON(self$`factor`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`factor_name`), "null",jsonlite::toJSON(self$`factor_name`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(FactorLevelGetDetailDTOJson) {

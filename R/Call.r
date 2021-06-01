@@ -99,10 +99,10 @@ Call <- R6::R6Class(
            "methods": [%s],
            "versions": [%s]
         }',
-        jsonlite::toJSON(self$`call`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`dataTypes`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`methods`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`versions`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`call`), "null",jsonlite::toJSON(self$`call`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`dataTypes`) || length(self$`dataTypes`) == 0, "" ,lapply(self$`dataTypes`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`methods`) || length(self$`methods`) == 0, "" ,lapply(self$`methods`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`versions`) || length(self$`versions`) == 0, "" ,lapply(self$`versions`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(CallJson) {

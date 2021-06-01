@@ -61,11 +61,11 @@ Level <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "levelInt": %d,
+           "levelInt": %s,
            "levelStr": %s
         }',
-        jsonlite::toJSON(self$`levelInt`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`levelStr`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`levelInt`), "null",as.numeric(jsonlite::toJSON(self$`levelInt`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`levelStr`), "null",jsonlite::toJSON(self$`levelStr`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(LevelJson) {

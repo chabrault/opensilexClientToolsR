@@ -85,9 +85,9 @@ Point <- R6::R6Class(
            "bbox": [%s],
            "coordinates": %s
         }',
-        jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`bbox`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        self$`coordinates`$toJSON()
+        ifelse(is.null(self$`type`), "null",jsonlite::toJSON(self$`type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`bbox`) || length(self$`bbox`) == 0, "" ,lapply(self$`bbox`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        jsonlite::toJSON(self$`coordinates`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(PointJson) {

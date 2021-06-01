@@ -148,13 +148,13 @@ CharacteristicUpdateDTO <- R6::R6Class(
            "broad_match": [%s],
            "narrow_match": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`exact_match`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`close_match`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`broad_match`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`narrow_match`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`exact_match`) || length(self$`exact_match`) == 0, "" ,lapply(self$`exact_match`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`close_match`) || length(self$`close_match`) == 0, "" ,lapply(self$`close_match`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`broad_match`) || length(self$`broad_match`) == 0, "" ,lapply(self$`broad_match`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`narrow_match`) || length(self$`narrow_match`) == 0, "" ,lapply(self$`narrow_match`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(CharacteristicUpdateDTOJson) {

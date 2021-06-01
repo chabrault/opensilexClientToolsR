@@ -168,14 +168,14 @@ ResourceTreeDTO <- R6::R6Class(
            "rdf_type": %s,
            "rdf_type_name": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`selected`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`disabled`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`parent`), "null",jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`selected`), "null",jsonlite::toJSON(self$`selected`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`disabled`), "null",jsonlite::toJSON(self$`disabled`,auto_unbox=TRUE, null = "null")),
         childrenList,
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type_name`), "null",jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ResourceTreeDTOJson) {

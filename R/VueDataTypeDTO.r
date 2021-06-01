@@ -112,11 +112,11 @@ VueDataTypeDTO <- R6::R6Class(
            "view_component": %s,
            "label_key": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`short_uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`label_key`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`short_uri`), "null",jsonlite::toJSON(self$`short_uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`input_component`), "null",jsonlite::toJSON(self$`input_component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`view_component`), "null",jsonlite::toJSON(self$`view_component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`label_key`), "null",jsonlite::toJSON(self$`label_key`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(VueDataTypeDTOJson) {

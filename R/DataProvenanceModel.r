@@ -111,10 +111,10 @@ DataProvenanceModel <- R6::R6Class(
            "settings": %s,
            "experiments": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
         prov_usedList,
-        self$`settings`$toJSON(),
-        lapply(self$`experiments`, function(x) paste(paste0('"', x, '"'), sep=","))
+        jsonlite::toJSON(self$`settings`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`experiments`) || length(self$`experiments`) == 0, "" ,lapply(self$`experiments`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(DataProvenanceModelJson) {

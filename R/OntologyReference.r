@@ -107,9 +107,9 @@ OntologyReference <- R6::R6Class(
            "version": %s
         }',
         documentationLinksList,
-        jsonlite::toJSON(self$`ontologyDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`ontologyName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`version`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`ontologyDbId`), "null",jsonlite::toJSON(self$`ontologyDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`ontologyName`), "null",jsonlite::toJSON(self$`ontologyName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`version`), "null",jsonlite::toJSON(self$`version`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(OntologyReferenceJson) {

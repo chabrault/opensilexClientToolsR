@@ -92,15 +92,15 @@ LngLatAlt <- R6::R6Class(
     toJSONString = function() {
        sprintf(
         '{
-           "longitude": %d,
-           "latitude": %d,
-           "altitude": %d,
+           "longitude": %s,
+           "latitude": %s,
+           "altitude": %s,
            "additionalElements": [%s]
         }',
-        jsonlite::toJSON(self$`longitude`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`latitude`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`altitude`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`additionalElements`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`longitude`), "null",as.numeric(jsonlite::toJSON(self$`longitude`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`latitude`), "null",as.numeric(jsonlite::toJSON(self$`latitude`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`altitude`), "null",as.numeric(jsonlite::toJSON(self$`altitude`,auto_unbox=TRUE, null = "null"))),
+        ifelse(is.null(self$`additionalElements`) || length(self$`additionalElements`) == 0, "" ,lapply(self$`additionalElements`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(LngLatAltJson) {

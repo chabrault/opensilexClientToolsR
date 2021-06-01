@@ -65,8 +65,8 @@ URITypesDTO <- R6::R6Class(
            "uri": %s,
            "rdf_types": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`rdf_types`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_types`) || length(self$`rdf_types`) == 0, "" ,lapply(self$`rdf_types`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(URITypesDTOJson) {

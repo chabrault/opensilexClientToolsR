@@ -129,12 +129,12 @@ InfrastructureUpdateDTO <- R6::R6Class(
            "parent": %s,
            "children": [%s]
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`children`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type_name`), "null",jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`parent`), "null",jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`children`) || length(self$`children`) == 0, "" ,lapply(self$`children`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(InfrastructureUpdateDTOJson) {

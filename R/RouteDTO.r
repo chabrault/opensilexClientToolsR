@@ -81,9 +81,9 @@ RouteDTO <- R6::R6Class(
            "component": %s,
            "credentials": [%s]
         }',
-        jsonlite::toJSON(self$`path`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`component`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`credentials`, function(x) paste(paste0('"', x, '"'), sep=","))
+        ifelse(is.null(self$`path`), "null",jsonlite::toJSON(self$`path`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`component`), "null",jsonlite::toJSON(self$`component`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`credentials`) || length(self$`credentials`) == 0, "" ,lapply(self$`credentials`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
     },
     fromJSONString = function(RouteDTOJson) {

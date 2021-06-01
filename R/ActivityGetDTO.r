@@ -116,11 +116,11 @@ ActivityGetDTO <- R6::R6Class(
            "end_date": %s,
            "settings": %s
         }',
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`start_date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`end_date`,auto_unbox=TRUE, null = "null"),
-        self$`settings`$toJSON()
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`start_date`), "null",jsonlite::toJSON(self$`start_date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`end_date`), "null",jsonlite::toJSON(self$`end_date`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`settings`$toJSON(),auto_unbox=TRUE, null = "null")
       )
     },
     fromJSONString = function(ActivityGetDTOJson) {

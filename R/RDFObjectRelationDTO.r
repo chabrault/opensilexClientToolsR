@@ -64,8 +64,8 @@ RDFObjectRelationDTO <- R6::R6Class(
            "property": %s,
            "value": %s
         }',
-        jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`value`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`property`), "null",jsonlite::toJSON(self$`property`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`value`), "null",jsonlite::toJSON(self$`value`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(RDFObjectRelationDTOJson) {

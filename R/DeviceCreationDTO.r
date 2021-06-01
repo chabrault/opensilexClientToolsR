@@ -233,18 +233,18 @@ DeviceCreationDTO <- R6::R6Class(
            "description": %s,
            "metadata": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`brand`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`constructor_model`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`serial_number`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`person_in_charge`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`start_up`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`removal`,auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`brand`), "null",jsonlite::toJSON(self$`brand`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`constructor_model`), "null",jsonlite::toJSON(self$`constructor_model`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`serial_number`), "null",jsonlite::toJSON(self$`serial_number`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`person_in_charge`), "null",jsonlite::toJSON(self$`person_in_charge`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`start_up`), "null",jsonlite::toJSON(self$`start_up`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`removal`), "null",jsonlite::toJSON(self$`removal`,auto_unbox=TRUE, null = "null")),
         relationsList,
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`metadata`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`metadata`), "null",jsonlite::toJSON(self$`metadata`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(DeviceCreationDTOJson) {

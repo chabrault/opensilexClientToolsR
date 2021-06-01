@@ -111,11 +111,11 @@ FontConfigDTO <- R6::R6Class(
            "url": %s,
            "src": %s
         }',
-        jsonlite::toJSON(self$`family`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`style`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`weight`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`url`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`src`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`family`), "null",jsonlite::toJSON(self$`family`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`style`), "null",jsonlite::toJSON(self$`style`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`weight`), "null",jsonlite::toJSON(self$`weight`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`url`), "null",jsonlite::toJSON(self$`url`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`src`), "null",jsonlite::toJSON(self$`src`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(FontConfigDTOJson) {

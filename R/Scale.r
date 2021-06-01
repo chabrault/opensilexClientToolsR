@@ -164,14 +164,14 @@ Scale <- R6::R6Class(
            "validValues": %s,
            "xref": %s
         }',
-        jsonlite::toJSON(self$`dataType`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`decimalPlaces`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        self$`ontologyReference`$toJSON(),
-        jsonlite::toJSON(self$`scaleDbId`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`scaleName`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`validValues`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`xref`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`dataType`), "null",jsonlite::toJSON(self$`dataType`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`decimalPlaces`), "null",jsonlite::toJSON(self$`decimalPlaces`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        jsonlite::toJSON(self$`ontologyReference`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`scaleDbId`), "null",jsonlite::toJSON(self$`scaleDbId`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`scaleName`), "null",jsonlite::toJSON(self$`scaleName`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`validValues`), "null",jsonlite::toJSON(self$`validValues`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`xref`), "null",jsonlite::toJSON(self$`xref`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(ScaleJson) {

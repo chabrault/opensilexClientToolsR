@@ -13,7 +13,7 @@ connectToOpenSILEX(identifier = NULL, password = NULL, url = NULL,
 \item{password}{password of the user to create the token}
 
 \item{url}{character, if apiID is private add the url of the chosen API, containing the IP,
-the full url with the protocol. e.g. 'http://www.opensilex.org/openSilexAPI/rest/'}
+the full url with the protocol. e.g. 'http://www.opensilex.org/openSilexAPI/rest'}
 
 \item{reconnection}{to force the client reconnection}
 }
@@ -25,6 +25,6 @@ and execute the function.
 Demonstration instances :
 \describe{
 connectToOpenSILEX(identifier="guest@opensilex.org",password="guest",
-url = "http://www.opensilex.org/openSilexAPI/rest/")
+url = "http://www.opensilex.org/openSilexAPI/rest")
 }
 }

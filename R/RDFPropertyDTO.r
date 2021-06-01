@@ -206,17 +206,17 @@ RDFPropertyDTO <- R6::R6Class(
            "domain_rdf_type": %s,
            "range_label": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`domain`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`range`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`name_translations`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`comment_translations`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`domain_rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`range_label`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name`), "null",jsonlite::toJSON(self$`name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment`), "null",jsonlite::toJSON(self$`comment`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`domain`), "null",jsonlite::toJSON(self$`domain`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`range`), "null",jsonlite::toJSON(self$`range`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`parent`), "null",jsonlite::toJSON(self$`parent`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`name_translations`), "null",jsonlite::toJSON(self$`name_translations`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`comment_translations`), "null",jsonlite::toJSON(self$`comment_translations`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`domain_rdf_type`), "null",jsonlite::toJSON(self$`domain_rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`range_label`), "null",jsonlite::toJSON(self$`range_label`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(RDFPropertyDTOJson) {

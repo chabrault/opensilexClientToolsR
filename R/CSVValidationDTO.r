@@ -82,11 +82,11 @@ CSVValidationDTO <- R6::R6Class(
         '{
            "errors": %s,
            "validation_token": %s,
-           "nb_lines_imported": %d
+           "nb_lines_imported": %s
         }',
-        self$`errors`$toJSON(),
-        jsonlite::toJSON(self$`validation_token`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`nb_lines_imported`,auto_unbox=TRUE, null = "null")
+        jsonlite::toJSON(self$`errors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        ifelse(is.null(self$`validation_token`), "null",jsonlite::toJSON(self$`validation_token`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`nb_lines_imported`), "null",as.numeric(jsonlite::toJSON(self$`nb_lines_imported`,auto_unbox=TRUE, null = "null")))
       )
     },
     fromJSONString = function(CSVValidationDTOJson) {

@@ -242,19 +242,19 @@ DocumentGetDTO <- R6::R6Class(
            "keywords": [%s],
            "deprecated": %s
         }',
-        jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`identifier`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`title`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        lapply(self$`authors`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`language`,auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`format`,auto_unbox=TRUE, null = "null"),
-        lapply(self$`keywords`, function(x) paste(paste0('"', x, '"'), sep=",")),
-        jsonlite::toJSON(self$`deprecated`,auto_unbox=TRUE, null = "null")
+        ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`identifier`), "null",jsonlite::toJSON(self$`identifier`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`rdf_type_name`), "null",jsonlite::toJSON(self$`rdf_type_name`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`title`), "null",jsonlite::toJSON(self$`title`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`description`), "null",jsonlite::toJSON(self$`description`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`targets`) || length(self$`targets`) == 0, "" ,lapply(self$`targets`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`authors`) || length(self$`authors`) == 0, "" ,lapply(self$`authors`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`language`), "null",jsonlite::toJSON(self$`language`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`format`), "null",jsonlite::toJSON(self$`format`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`keywords`) || length(self$`keywords`) == 0, "" ,lapply(self$`keywords`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`deprecated`), "null",jsonlite::toJSON(self$`deprecated`,auto_unbox=TRUE, null = "null"))
       )
     },
     fromJSONString = function(DocumentGetDTOJson) {

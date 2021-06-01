@@ -34,7 +34,7 @@ install(".")
 ```R
 library(opensilexClientToolsR)
 # Le chargement a nécessité le package : opensilexWSClientR
-opensilexClientToolsR::connectToPHISWS(apiID="ws_private",username="guest@opensilex.org",password="guest", url = "https://localhost/")
+opensilexClientToolsR::connectToOpenSILEX(apiID="ws_private",username="guest@opensilex.org",password="guest", url = "https://localhost/")
 # 2019-10-04 10:05:40 INFO::Query executed and data recovered - WS2
 annoService <- AnnotationsApi$new()
 # create Annotations
