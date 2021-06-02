@@ -20,7 +20,7 @@ DataCreationDTO Class
 
 \item{\code{timezone}}{}
 
-\item{\code{scientific_objects}}{}
+\item{\code{scientific_object}}{}
 
 \item{\code{variable}}{}
 
@@ -31,6 +31,8 @@ DataCreationDTO Class
 \item{\code{provenance}}{}
 
 \item{\code{metadata}}{}
+
+\item{\code{raw_data}}{}
 }}
 
 \keyword{datasets}

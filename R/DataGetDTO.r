@@ -11,12 +11,13 @@
 #'
 #' @field uri 
 #' @field date 
-#' @field scientific_objects 
+#' @field scientific_object 
 #' @field variable 
 #' @field value 
 #' @field confidence 
 #' @field provenance 
 #' @field metadata 
+#' @field raw_data 
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -26,13 +27,14 @@ DataGetDTO <- R6::R6Class(
   public = list(
     `uri` = NULL,
     `date` = NULL,
-    `scientific_objects` = NULL,
+    `scientific_object` = NULL,
     `variable` = NULL,
     `value` = NULL,
     `confidence` = NULL,
     `provenance` = NULL,
     `metadata` = NULL,
-    initialize = function(`uri`, `date`, `scientific_objects`, `variable`, `value`, `confidence`, `provenance`, `metadata`){
+    `raw_data` = NULL,
+    initialize = function(`uri`, `date`, `scientific_object`, `variable`, `value`, `confidence`, `provenance`, `metadata`, `raw_data`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -41,10 +43,9 @@ DataGetDTO <- R6::R6Class(
         stopifnot(is.character(`date`), length(`date`) == 1)
         self$`date` <- `date`
       }
-      if (!missing(`scientific_objects`)) {
-        stopifnot(is.list(`scientific_objects`), length(`scientific_objects`) != 0)
-        lapply(`scientific_objects`, function(x) stopifnot(is.character(x)))
-        self$`scientific_objects` <- `scientific_objects`
+      if (!missing(`scientific_object`)) {
+        stopifnot(is.character(`scientific_object`), length(`scientific_object`) == 1)
+        self$`scientific_object` <- `scientific_object`
       }
       if (!missing(`variable`)) {
         stopifnot(is.character(`variable`), length(`variable`) == 1)
@@ -66,6 +67,11 @@ DataGetDTO <- R6::R6Class(
         stopifnot(R6::is.R6(`metadata`))
         self$`metadata` <- `metadata`
       }
+      if (!missing(`raw_data`)) {
+        stopifnot(is.list(`raw_data`), length(`raw_data`) != 0)
+        lapply(`raw_data`, function(x) stopifnot(R6::is.R6(x)))
+        self$`raw_data` <- `raw_data`
+      }
     },
     toJSON = function() {
       DataGetDTOObject <- list()
@@ -75,8 +81,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(self$`date`)) {
         DataGetDTOObject[['date']] <- self$`date`
       }
-      if (!is.null(self$`scientific_objects`)) {
-        DataGetDTOObject[['scientific_objects']] <- self$`scientific_objects`
+      if (!is.null(self$`scientific_object`)) {
+        DataGetDTOObject[['scientific_object']] <- self$`scientific_object`
       }
       if (!is.null(self$`variable`)) {
         DataGetDTOObject[['variable']] <- self$`variable`
@@ -93,6 +99,9 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(self$`metadata`)) {
         DataGetDTOObject[['metadata']] <- self$`metadata`$toJSON()
       }
+      if (!is.null(self$`raw_data`)) {
+        DataGetDTOObject[['raw_data']] <- lapply(self$`raw_data`, function(x) x$toJSON())
+      }
 
       DataGetDTOObject
     },
@@ -104,8 +113,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(DataGetDTOObject$`date`)) {
         self$`date` <- DataGetDTOObject$`date`
       }
-      if (!is.null(DataGetDTOObject$`scientific_objects`)) {
-        self$`scientific_objects` <- DataGetDTOObject$`scientific_objects`
+      if (!is.null(DataGetDTOObject$`scientific_object`)) {
+        self$`scientific_object` <- DataGetDTOObject$`scientific_object`
       }
       if (!is.null(DataGetDTOObject$`variable`)) {
         self$`variable` <- DataGetDTOObject$`variable`
@@ -127,6 +136,13 @@ DataGetDTO <- R6::R6Class(
         metadataObject <- ObjectDTO$new()
         metadataObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$metadata, auto_unbox = TRUE, null = "null"))
         self$`metadata` <- metadataObject
+      }
+      if (!is.null(DataGetDTOObject$`raw_data`)) {
+        self$`raw_data` <- lapply(DataGetDTOObject$`raw_data`, function(x) {
+          raw_dataObject <- ObjectDTO$new()
+          raw_dataObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          raw_dataObject
+        })
       }
     },
     fromJSONObject = function(DataGetDTOObject) {
@@ -136,8 +152,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(DataGetDTOObject$`date`)) {
         self$`date` <- DataGetDTOObject$`date`
       }
-      if (!is.null(DataGetDTOObject$`scientific_objects`)) {
-        self$`scientific_objects` <- DataGetDTOObject$`scientific_objects`
+      if (!is.null(DataGetDTOObject$`scientific_object`)) {
+        self$`scientific_object` <- DataGetDTOObject$`scientific_object`
       }
       if (!is.null(DataGetDTOObject$`variable`)) {
         self$`variable` <- DataGetDTOObject$`variable`
@@ -160,34 +176,44 @@ DataGetDTO <- R6::R6Class(
         metadataObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$metadata, auto_unbox = TRUE, null = "null"))
         self$`metadata` <- metadataObject
       }
+      if (!is.null(DataGetDTOObject$`raw_data`)) {
+        self$`raw_data` <- lapply(DataGetDTOObject$`raw_data`, function(x) {
+          raw_dataObject <- ObjectDTO$new()
+          raw_dataObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          raw_dataObject
+        })
+      }
     },
     toJSONString = function() {
+      raw_dataList = paste(lapply(self$`raw_data`, function(x) x$toJSONString()),collapse = ",")
        sprintf(
         '{
            "uri": %s,
            "date": %s,
-           "scientific_objects": [%s],
+           "scientific_object": %s,
            "variable": %s,
            "value": %s,
            "confidence": %s,
            "provenance": %s,
-           "metadata": %s
+           "metadata": %s,
+           "raw_data": [%s]
         }',
         ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
-        ifelse(is.null(self$`scientific_objects`) || length(self$`scientific_objects`) == 0, "" ,lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`scientific_object`), "null",jsonlite::toJSON(self$`scientific_object`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`variable`), "null",jsonlite::toJSON(self$`variable`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`value`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`confidence`), "null",as.numeric(jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null"))),
         jsonlite::toJSON(self$`provenance`$toJSON(),auto_unbox=TRUE, null = "null"),
-        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null")
+        jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null"),
+        raw_dataList
       )
     },
     fromJSONString = function(DataGetDTOJson) {
       DataGetDTOObject <- jsonlite::fromJSON(DataGetDTOJson)
       self$`uri` <- DataGetDTOObject$`uri`
       self$`date` <- DataGetDTOObject$`date`
-      self$`scientific_objects` <- DataGetDTOObject$`scientific_objects`
+      self$`scientific_object` <- DataGetDTOObject$`scientific_object`
       self$`variable` <- DataGetDTOObject$`variable`
       ObjectDTOObject <- ObjectDTO$new()
       self$`value` <- ObjectDTOObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$value, auto_unbox = TRUE))
@@ -196,6 +222,7 @@ DataGetDTO <- R6::R6Class(
       self$`provenance` <- DataProvenanceModelObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$provenance, auto_unbox = TRUE))
       ObjectDTOObject <- ObjectDTO$new()
       self$`metadata` <- ObjectDTOObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$metadata, auto_unbox = TRUE))
+      self$`raw_data` <- lapply(DataGetDTOObject$`raw_data`, function(x) ObjectDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
     }
   )
 )

@@ -22,7 +22,7 @@ DataFilePathCreationDTO Class
 
 \item{\code{timezone}}{}
 
-\item{\code{scientific_objects}}{}
+\item{\code{scientific_object}}{}
 
 \item{\code{provenance}}{}
 

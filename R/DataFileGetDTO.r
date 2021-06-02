@@ -13,7 +13,7 @@
 #' @field rdf_type 
 #' @field date 
 #' @field timezone 
-#' @field scientific_objects 
+#' @field scientific_object 
 #' @field provenance 
 #' @field metadata 
 #'
@@ -27,10 +27,10 @@ DataFileGetDTO <- R6::R6Class(
     `rdf_type` = NULL,
     `date` = NULL,
     `timezone` = NULL,
-    `scientific_objects` = NULL,
+    `scientific_object` = NULL,
     `provenance` = NULL,
     `metadata` = NULL,
-    initialize = function(`uri`, `rdf_type`, `date`, `timezone`, `scientific_objects`, `provenance`, `metadata`){
+    initialize = function(`uri`, `rdf_type`, `date`, `timezone`, `scientific_object`, `provenance`, `metadata`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -47,10 +47,9 @@ DataFileGetDTO <- R6::R6Class(
         stopifnot(is.character(`timezone`), length(`timezone`) == 1)
         self$`timezone` <- `timezone`
       }
-      if (!missing(`scientific_objects`)) {
-        stopifnot(is.list(`scientific_objects`), length(`scientific_objects`) != 0)
-        lapply(`scientific_objects`, function(x) stopifnot(is.character(x)))
-        self$`scientific_objects` <- `scientific_objects`
+      if (!missing(`scientific_object`)) {
+        stopifnot(is.character(`scientific_object`), length(`scientific_object`) == 1)
+        self$`scientific_object` <- `scientific_object`
       }
       if (!missing(`provenance`)) {
         stopifnot(R6::is.R6(`provenance`))
@@ -75,8 +74,8 @@ DataFileGetDTO <- R6::R6Class(
       if (!is.null(self$`timezone`)) {
         DataFileGetDTOObject[['timezone']] <- self$`timezone`
       }
-      if (!is.null(self$`scientific_objects`)) {
-        DataFileGetDTOObject[['scientific_objects']] <- self$`scientific_objects`
+      if (!is.null(self$`scientific_object`)) {
+        DataFileGetDTOObject[['scientific_object']] <- self$`scientific_object`
       }
       if (!is.null(self$`provenance`)) {
         DataFileGetDTOObject[['provenance']] <- self$`provenance`$toJSON()
@@ -101,8 +100,8 @@ DataFileGetDTO <- R6::R6Class(
       if (!is.null(DataFileGetDTOObject$`timezone`)) {
         self$`timezone` <- DataFileGetDTOObject$`timezone`
       }
-      if (!is.null(DataFileGetDTOObject$`scientific_objects`)) {
-        self$`scientific_objects` <- DataFileGetDTOObject$`scientific_objects`
+      if (!is.null(DataFileGetDTOObject$`scientific_object`)) {
+        self$`scientific_object` <- DataFileGetDTOObject$`scientific_object`
       }
       if (!is.null(DataFileGetDTOObject$`provenance`)) {
         provenanceObject <- DataProvenanceModel$new()
@@ -128,8 +127,8 @@ DataFileGetDTO <- R6::R6Class(
       if (!is.null(DataFileGetDTOObject$`timezone`)) {
         self$`timezone` <- DataFileGetDTOObject$`timezone`
       }
-      if (!is.null(DataFileGetDTOObject$`scientific_objects`)) {
-        self$`scientific_objects` <- DataFileGetDTOObject$`scientific_objects`
+      if (!is.null(DataFileGetDTOObject$`scientific_object`)) {
+        self$`scientific_object` <- DataFileGetDTOObject$`scientific_object`
       }
       if (!is.null(DataFileGetDTOObject$`provenance`)) {
         provenanceObject <- DataProvenanceModel$new()
@@ -149,7 +148,7 @@ DataFileGetDTO <- R6::R6Class(
            "rdf_type": %s,
            "date": %s,
            "timezone": %s,
-           "scientific_objects": [%s],
+           "scientific_object": %s,
            "provenance": %s,
            "metadata": %s
         }',
@@ -157,7 +156,7 @@ DataFileGetDTO <- R6::R6Class(
         ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`timezone`), "null",jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null")),
-        ifelse(is.null(self$`scientific_objects`) || length(self$`scientific_objects`) == 0, "" ,lapply(self$`scientific_objects`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`scientific_object`), "null",jsonlite::toJSON(self$`scientific_object`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`provenance`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null")
       )
@@ -168,7 +167,7 @@ DataFileGetDTO <- R6::R6Class(
       self$`rdf_type` <- DataFileGetDTOObject$`rdf_type`
       self$`date` <- DataFileGetDTOObject$`date`
       self$`timezone` <- DataFileGetDTOObject$`timezone`
-      self$`scientific_objects` <- DataFileGetDTOObject$`scientific_objects`
+      self$`scientific_object` <- DataFileGetDTOObject$`scientific_object`
       DataProvenanceModelObject <- DataProvenanceModel$new()
       self$`provenance` <- DataProvenanceModelObject$fromJSON(jsonlite::toJSON(DataFileGetDTOObject$provenance, auto_unbox = TRUE))
       ObjectDTOObject <- ObjectDTO$new()

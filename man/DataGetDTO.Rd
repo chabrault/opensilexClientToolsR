@@ -18,7 +18,7 @@ DataGetDTO Class
 
 \item{\code{date}}{}
 
-\item{\code{scientific_objects}}{}
+\item{\code{scientific_object}}{}
 
 \item{\code{variable}}{}
 
@@ -29,6 +29,8 @@ DataGetDTO Class
 \item{\code{provenance}}{}
 
 \item{\code{metadata}}{}
+
+\item{\code{raw_data}}{}
 }}
 
 \keyword{datasets}
