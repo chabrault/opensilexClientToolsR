@@ -40,7 +40,12 @@ ObjectDTO  <- R6::R6Class(
       if(is.null(self$attribs)){
         NULL
       }else{
-         jsonlite::toJSON(self$attribs, auto_unbox = TRUE)
+        if(is.numeric(self$attribs)){
+          self$attribs
+        }else{
+          jsonlite::toJSON(self$attribs, auto_unbox = TRUE)
+        }
+         
       } 
     }
   )
