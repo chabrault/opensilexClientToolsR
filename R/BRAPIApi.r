@@ -21,6 +21,9 @@
 #' get_calls Check the available BrAPI calls
 #'
 #'
+#' get_germplasm_by_search Submit a search request for germplasm
+#'
+#'
 #' get_observation_units List all the observation units measured in the study.
 #'
 #'
@@ -50,7 +53,7 @@
 BRAPIApi <- R6::R6Class(
   'BRAPIApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -99,6 +102,81 @@ BRAPIApi <- R6::R6Class(
           for(i in 1:nrow(data)){
             row <- data[i,]
             returnObject <- Call$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    get_germplasm_by_search = function(germplasm_db_id,germplasm_pui,germplasm_name,common_crop_name,page,page_size,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`germplasm_db_id`)) {
+        queryParams['germplasmDbId'] <- germplasm_db_id
+      }
+
+      if (!missing(`germplasm_pui`)) {
+        queryParams['germplasmPUI'] <- germplasm_pui
+      }
+
+      if (!missing(`germplasm_name`)) {
+        queryParams['germplasmName'] <- germplasm_name
+      }
+
+      if (!missing(`common_crop_name`)) {
+        queryParams['commonCropName'] <- common_crop_name
+      }
+
+      if (!missing(`page`)) {
+        queryParams['page'] <- page
+      }
+
+      if (!missing(`page_size`)) {
+        queryParams['page_size'] <- page_size
+      }
+
+      urlPath <- "/brapi/v1/germplasm"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- GermplasmDTO$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }

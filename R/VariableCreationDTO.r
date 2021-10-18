@@ -19,6 +19,7 @@
 #' @field trait_name 
 #' @field method 
 #' @field unit 
+#' @field species 
 #' @field datatype 
 #' @field time_interval 
 #' @field sampling_interval 
@@ -43,6 +44,7 @@ VariableCreationDTO <- R6::R6Class(
     `trait_name` = NULL,
     `method` = NULL,
     `unit` = NULL,
+    `species` = NULL,
     `datatype` = NULL,
     `time_interval` = NULL,
     `sampling_interval` = NULL,
@@ -50,7 +52,7 @@ VariableCreationDTO <- R6::R6Class(
     `close_match` = NULL,
     `broad_match` = NULL,
     `narrow_match` = NULL,
-    initialize = function(`uri`, `name`, `alternative_name`, `description`, `entity`, `characteristic`, `trait`, `trait_name`, `method`, `unit`, `datatype`, `time_interval`, `sampling_interval`, `exact_match`, `close_match`, `broad_match`, `narrow_match`){
+    initialize = function(`uri`, `name`, `alternative_name`, `description`, `entity`, `characteristic`, `trait`, `trait_name`, `method`, `unit`, `species`, `datatype`, `time_interval`, `sampling_interval`, `exact_match`, `close_match`, `broad_match`, `narrow_match`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -90,6 +92,10 @@ VariableCreationDTO <- R6::R6Class(
       if (!missing(`unit`)) {
         stopifnot(is.character(`unit`), length(`unit`) == 1)
         self$`unit` <- `unit`
+      }
+      if (!missing(`species`)) {
+        stopifnot(is.character(`species`), length(`species`) == 1)
+        self$`species` <- `species`
       }
       if (!missing(`datatype`)) {
         stopifnot(is.character(`datatype`), length(`datatype`) == 1)
@@ -156,6 +162,9 @@ VariableCreationDTO <- R6::R6Class(
       if (!is.null(self$`unit`)) {
         VariableCreationDTOObject[['unit']] <- self$`unit`
       }
+      if (!is.null(self$`species`)) {
+        VariableCreationDTOObject[['species']] <- self$`species`
+      }
       if (!is.null(self$`datatype`)) {
         VariableCreationDTOObject[['datatype']] <- self$`datatype`
       }
@@ -212,6 +221,9 @@ VariableCreationDTO <- R6::R6Class(
       if (!is.null(VariableCreationDTOObject$`unit`)) {
         self$`unit` <- VariableCreationDTOObject$`unit`
       }
+      if (!is.null(VariableCreationDTOObject$`species`)) {
+        self$`species` <- VariableCreationDTOObject$`species`
+      }
       if (!is.null(VariableCreationDTOObject$`datatype`)) {
         self$`datatype` <- VariableCreationDTOObject$`datatype`
       }
@@ -265,6 +277,9 @@ VariableCreationDTO <- R6::R6Class(
       if (!is.null(VariableCreationDTOObject$`unit`)) {
         self$`unit` <- VariableCreationDTOObject$`unit`
       }
+      if (!is.null(VariableCreationDTOObject$`species`)) {
+        self$`species` <- VariableCreationDTOObject$`species`
+      }
       if (!is.null(VariableCreationDTOObject$`datatype`)) {
         self$`datatype` <- VariableCreationDTOObject$`datatype`
       }
@@ -300,6 +315,7 @@ VariableCreationDTO <- R6::R6Class(
            "trait_name": %s,
            "method": %s,
            "unit": %s,
+           "species": %s,
            "datatype": %s,
            "time_interval": %s,
            "sampling_interval": %s,
@@ -318,6 +334,7 @@ VariableCreationDTO <- R6::R6Class(
         ifelse(is.null(self$`trait_name`), "null",jsonlite::toJSON(self$`trait_name`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`method`), "null",jsonlite::toJSON(self$`method`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`unit`), "null",jsonlite::toJSON(self$`unit`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`species`), "null",jsonlite::toJSON(self$`species`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`datatype`), "null",jsonlite::toJSON(self$`datatype`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`time_interval`), "null",jsonlite::toJSON(self$`time_interval`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`sampling_interval`), "null",jsonlite::toJSON(self$`sampling_interval`,auto_unbox=TRUE, null = "null")),
@@ -339,6 +356,7 @@ VariableCreationDTO <- R6::R6Class(
       self$`trait_name` <- VariableCreationDTOObject$`trait_name`
       self$`method` <- VariableCreationDTOObject$`method`
       self$`unit` <- VariableCreationDTOObject$`unit`
+      self$`species` <- VariableCreationDTOObject$`species`
       self$`datatype` <- VariableCreationDTOObject$`datatype`
       self$`time_interval` <- VariableCreationDTOObject$`time_interval`
       self$`sampling_interval` <- VariableCreationDTOObject$`sampling_interval`

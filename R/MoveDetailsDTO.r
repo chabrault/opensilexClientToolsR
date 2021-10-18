@@ -190,7 +190,7 @@ MoveDetailsDTO <- R6::R6Class(
       }
       if (!is.null(MoveDetailsDTOObject$`targets_positions`)) {
         self$`targets_positions` <- lapply(MoveDetailsDTOObject$`targets_positions`, function(x) {
-          targets_positionsObject <- ConcernedItemPositionGetDTO$new()
+          targets_positionsObject <- TargetPositionGetDTO$new()
           targets_positionsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
           targets_positionsObject
         })
@@ -243,7 +243,7 @@ MoveDetailsDTO <- R6::R6Class(
       }
       if (!is.null(MoveDetailsDTOObject$`targets_positions`)) {
         self$`targets_positions` <- lapply(MoveDetailsDTOObject$`targets_positions`, function(x) {
-          targets_positionsObject <- ConcernedItemPositionGetDTO$new()
+          targets_positionsObject <- TargetPositionGetDTO$new()
           targets_positionsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
           targets_positionsObject
         })
@@ -299,7 +299,7 @@ MoveDetailsDTO <- R6::R6Class(
       self$`from` <- InfrastructureFacilityNamedDTOObject$fromJSON(jsonlite::toJSON(MoveDetailsDTOObject$from, auto_unbox = TRUE))
       InfrastructureFacilityNamedDTOObject <- InfrastructureFacilityNamedDTO$new()
       self$`to` <- InfrastructureFacilityNamedDTOObject$fromJSON(jsonlite::toJSON(MoveDetailsDTOObject$to, auto_unbox = TRUE))
-      self$`targets_positions` <- lapply(MoveDetailsDTOObject$`targets_positions`, function(x) ConcernedItemPositionGetDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
+      self$`targets_positions` <- lapply(MoveDetailsDTOObject$`targets_positions`, function(x) TargetPositionGetDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
     }
   )
 )

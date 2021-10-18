@@ -33,7 +33,7 @@
 #' delete_property Delete a property
 #'
 #'
-#' get_classes Return classes models definitions with properties for a list of rdt types
+#' get_classes Return classes models definitions with properties for a list of rdf types
 #'
 #'
 #' get_data_properties Search data properties tree
@@ -57,6 +57,12 @@
 #' get_uri_label Return associated rdfs:label of an uri if exists
 #'
 #'
+#' get_uri_labels_list Return associated rdfs:label of uris if they exist
+#'
+#'
+#' search_sub_classes_of Search sub-classes tree of an RDF class
+#'
+#'
 #' update_class_property_restriction Update a rdf type property restriction
 #'
 #'
@@ -68,7 +74,7 @@
 OntologyApi <- R6::R6Class(
   'OntologyApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -831,6 +837,128 @@ OntologyApi <- R6::R6Class(
           for(i in 1:nrow(data)){
             row <- data[i,]
             returnObject <- Character$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    get_uri_labels_list = function(uri,context,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`uri`)) {
+        queryParams['uri'] <- uri
+      }
+
+      if (!missing(`context`)) {
+        queryParams['context'] <- context
+      }
+
+      urlPath <- "/ontology/uris_labels"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- Character$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    search_sub_classes_of = function(parent_type,name,ignore_root_classes,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`parent_type`)) {
+        queryParams['parent_type'] <- parent_type
+      }
+
+      if (!missing(`name`)) {
+        queryParams['name'] <- name
+      }
+
+      if (!missing(`ignore_root_classes`)) {
+        queryParams['ignoreRootClasses'] <- ignore_root_classes
+      }
+
+      urlPath <- "/ontology/subclasses_of/search"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ResourceTreeDTO$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }

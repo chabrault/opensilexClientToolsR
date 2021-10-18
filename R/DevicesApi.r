@@ -18,6 +18,9 @@
 #' @section Methods:
 #' \describe{
 #'
+#' count_device_data Count device data
+#'
+#'
 #' create_device Create a device
 #'
 #'
@@ -33,13 +36,16 @@
 #' get_device Get device detail
 #'
 #'
+#' get_device_by_uris Get devices by uris
+#'
+#'
 #' get_device_data_files_provenances Get provenances of datafiles linked to this device
 #'
 #'
 #' get_device_data_provenances Get provenances of data that have been measured on this device
 #'
 #'
-#' get_device_variables Get variables measured by the device
+#' get_device_variables Get variables linked to the device
 #'
 #'
 #' search_device_data Search device data
@@ -59,7 +65,7 @@
 DevicesApi <- R6::R6Class(
   'DevicesApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -68,6 +74,97 @@ DevicesApi <- R6::R6Class(
       else {
         self$apiClient <- ApiClient$new()
       }
+    },
+    count_device_data = function(uri,start_date,end_date,timezone,experiment,variable,min_confidence,max_confidence,provenance,metadata,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`start_date`)) {
+        queryParams['start_date'] <- start_date
+      }
+
+      if (!missing(`end_date`)) {
+        queryParams['end_date'] <- end_date
+      }
+
+      if (!missing(`timezone`)) {
+        queryParams['timezone'] <- timezone
+      }
+
+      if (!missing(`experiment`)) {
+        queryParams['experiment'] <- experiment
+      }
+
+      if (!missing(`variable`)) {
+        queryParams['variable'] <- variable
+      }
+
+      if (!missing(`min_confidence`)) {
+        queryParams['min_confidence'] <- min_confidence
+      }
+
+      if (!missing(`max_confidence`)) {
+        queryParams['max_confidence'] <- max_confidence
+      }
+
+      if (!missing(`provenance`)) {
+        queryParams['provenance'] <- provenance
+      }
+
+      if (!missing(`metadata`)) {
+        queryParams['metadata'] <- metadata
+      }
+
+      urlPath <- "/core/devices/{uri}/data/count"
+      if (!missing(`uri`)) {
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+      }
+
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- Integer$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
     },
     create_device = function(body,check_only,...){
       args <- list(...)
@@ -191,7 +288,7 @@ DevicesApi <- R6::R6Class(
       }
 
     },
-    export_devices = function(name_pattern,rdf_type,year,existence_date,brand_pattern,model_pattern,serial_number_pattern,metadata,...){
+    export_devices = function(rdf_type,include_subtypes,name,year,existence_date,brand,model,serial_number,metadata,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -207,12 +304,16 @@ DevicesApi <- R6::R6Class(
       #  headerParams['Accept-Language'] <- accept_language
       #}
 
-      if (!missing(`name_pattern`)) {
-        queryParams['namePattern'] <- name_pattern
+      if (!missing(`rdf_type`)) {
+        queryParams['rdf_type'] <- rdf_type
       }
 
-      if (!missing(`rdf_type`)) {
-        queryParams['rdfType'] <- rdf_type
+      if (!missing(`include_subtypes`)) {
+        queryParams['include_subtypes'] <- include_subtypes
+      }
+
+      if (!missing(`name`)) {
+        queryParams['name'] <- name
       }
 
       if (!missing(`year`)) {
@@ -223,16 +324,16 @@ DevicesApi <- R6::R6Class(
         queryParams['existence_date'] <- existence_date
       }
 
-      if (!missing(`brand_pattern`)) {
-        queryParams['brandPattern'] <- brand_pattern
+      if (!missing(`brand`)) {
+        queryParams['brand'] <- brand
       }
 
-      if (!missing(`model_pattern`)) {
-        queryParams['modelPattern'] <- model_pattern
+      if (!missing(`model`)) {
+        queryParams['model'] <- model
       }
 
-      if (!missing(`serial_number_pattern`)) {
-        queryParams['serialNumberPattern'] <- serial_number_pattern
+      if (!missing(`serial_number`)) {
+        queryParams['serial_number'] <- serial_number
       }
 
       if (!missing(`metadata`)) {
@@ -342,6 +443,61 @@ DevicesApi <- R6::R6Class(
           for(i in 1:nrow(data)){
             row <- data[i,]
             returnObject <- DeviceGetDetailsDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    get_device_by_uris = function(uris,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`uris`)) {
+        queryParams['uris'] <- uris
+      }
+
+      urlPath <- "/core/devices/by_uris"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- DeviceGetDTO$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }
@@ -727,7 +883,7 @@ DevicesApi <- R6::R6Class(
       }
 
     },
-    search_devices = function(rdf_type,name,year,existence_date,brand,model,serial_number,metadata,order_by,page,page_size,...){
+    search_devices = function(rdf_type,include_subtypes,name,year,existence_date,brand,model,serial_number,metadata,order_by,page,page_size,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -745,6 +901,10 @@ DevicesApi <- R6::R6Class(
 
       if (!missing(`rdf_type`)) {
         queryParams['rdf_type'] <- rdf_type
+      }
+
+      if (!missing(`include_subtypes`)) {
+        queryParams['include_subtypes'] <- include_subtypes
       }
 
       if (!missing(`name`)) {

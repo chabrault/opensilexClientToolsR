@@ -41,7 +41,7 @@
 ProjectsApi <- R6::R6Class(
   'ProjectsApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {

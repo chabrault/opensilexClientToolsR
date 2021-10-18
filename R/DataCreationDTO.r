@@ -12,7 +12,7 @@
 #' @field uri 
 #' @field date 
 #' @field timezone 
-#' @field scientific_object 
+#' @field target 
 #' @field variable 
 #' @field value 
 #' @field confidence 
@@ -29,14 +29,14 @@ DataCreationDTO <- R6::R6Class(
     `uri` = NULL,
     `date` = NULL,
     `timezone` = NULL,
-    `scientific_object` = NULL,
+    `target` = NULL,
     `variable` = NULL,
     `value` = NULL,
     `confidence` = NULL,
     `provenance` = NULL,
     `metadata` = NULL,
     `raw_data` = NULL,
-    initialize = function(`uri`, `date`, `timezone`, `scientific_object`, `variable`, `value`, `confidence`, `provenance`, `metadata`, `raw_data`){
+    initialize = function(`uri`, `date`, `timezone`, `target`, `variable`, `value`, `confidence`, `provenance`, `metadata`, `raw_data`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -49,9 +49,9 @@ DataCreationDTO <- R6::R6Class(
         stopifnot(is.character(`timezone`), length(`timezone`) == 1)
         self$`timezone` <- `timezone`
       }
-      if (!missing(`scientific_object`)) {
-        stopifnot(is.character(`scientific_object`), length(`scientific_object`) == 1)
-        self$`scientific_object` <- `scientific_object`
+      if (!missing(`target`)) {
+        stopifnot(is.character(`target`), length(`target`) == 1)
+        self$`target` <- `target`
       }
       if (!missing(`variable`)) {
         stopifnot(is.character(`variable`), length(`variable`) == 1)
@@ -90,8 +90,8 @@ DataCreationDTO <- R6::R6Class(
       if (!is.null(self$`timezone`)) {
         DataCreationDTOObject[['timezone']] <- self$`timezone`
       }
-      if (!is.null(self$`scientific_object`)) {
-        DataCreationDTOObject[['scientific_object']] <- self$`scientific_object`
+      if (!is.null(self$`target`)) {
+        DataCreationDTOObject[['target']] <- self$`target`
       }
       if (!is.null(self$`variable`)) {
         DataCreationDTOObject[['variable']] <- self$`variable`
@@ -125,8 +125,8 @@ DataCreationDTO <- R6::R6Class(
       if (!is.null(DataCreationDTOObject$`timezone`)) {
         self$`timezone` <- DataCreationDTOObject$`timezone`
       }
-      if (!is.null(DataCreationDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataCreationDTOObject$`scientific_object`
+      if (!is.null(DataCreationDTOObject$`target`)) {
+        self$`target` <- DataCreationDTOObject$`target`
       }
       if (!is.null(DataCreationDTOObject$`variable`)) {
         self$`variable` <- DataCreationDTOObject$`variable`
@@ -167,8 +167,8 @@ DataCreationDTO <- R6::R6Class(
       if (!is.null(DataCreationDTOObject$`timezone`)) {
         self$`timezone` <- DataCreationDTOObject$`timezone`
       }
-      if (!is.null(DataCreationDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataCreationDTOObject$`scientific_object`
+      if (!is.null(DataCreationDTOObject$`target`)) {
+        self$`target` <- DataCreationDTOObject$`target`
       }
       if (!is.null(DataCreationDTOObject$`variable`)) {
         self$`variable` <- DataCreationDTOObject$`variable`
@@ -206,7 +206,7 @@ DataCreationDTO <- R6::R6Class(
            "uri": %s,
            "date": %s,
            "timezone": %s,
-           "scientific_object": %s,
+           "target": %s,
            "variable": %s,
            "value": %s,
            "confidence": %s,
@@ -217,7 +217,7 @@ DataCreationDTO <- R6::R6Class(
         ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`timezone`), "null",jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null")),
-        ifelse(is.null(self$`scientific_object`), "null",jsonlite::toJSON(self$`scientific_object`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`target`), "null",jsonlite::toJSON(self$`target`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`variable`), "null",jsonlite::toJSON(self$`variable`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`value`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`confidence`), "null",as.numeric(jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null"))),
@@ -231,7 +231,7 @@ DataCreationDTO <- R6::R6Class(
       self$`uri` <- DataCreationDTOObject$`uri`
       self$`date` <- DataCreationDTOObject$`date`
       self$`timezone` <- DataCreationDTOObject$`timezone`
-      self$`scientific_object` <- DataCreationDTOObject$`scientific_object`
+      self$`target` <- DataCreationDTOObject$`target`
       self$`variable` <- DataCreationDTOObject$`variable`
       ObjectDTOObject <- ObjectDTO$new()
       self$`value` <- ObjectDTOObject$fromJSON(jsonlite::toJSON(DataCreationDTOObject$value, auto_unbox = TRUE))

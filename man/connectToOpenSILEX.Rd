@@ -4,8 +4,12 @@
 \alias{connectToOpenSILEX}
 \title{connectToOpenSILEX}
 \usage{
-connectToOpenSILEX(identifier = NULL, password = NULL, url = NULL,
-  reconnection = TRUE)
+connectToOpenSILEX(
+  identifier = NULL,
+  password = NULL,
+  url = NULL,
+  reconnection = TRUE
+)
 }
 \arguments{
 \item{identifier}{login of the user to create the token}

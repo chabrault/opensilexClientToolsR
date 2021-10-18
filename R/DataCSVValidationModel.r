@@ -10,6 +10,7 @@
 #' DataCSVValidationModel Class
 #'
 #' @field missingHeaders 
+#' @field emptyHeaders 
 #' @field invalidHeaderURIs 
 #' @field datatypeErrors 
 #' @field uriNotFoundErrors 
@@ -21,7 +22,12 @@
 #' @field invalidObjectErrors 
 #' @field invalidDateErrors 
 #' @field invalidDataTypeErrors 
+#' @field invalidExperimentErrors 
+#' @field invalidDeviceErrors 
 #' @field duplicatedDataErrors 
+#' @field duplicatedObjectErrors 
+#' @field duplicatedExperimentErrors 
+#' @field duplicatedDeviceErrors 
 #' @field headers 
 #' @field headersLabels 
 #' @field nbLinesImported 
@@ -39,6 +45,7 @@ DataCSVValidationModel <- R6::R6Class(
   'DataCSVValidationModel',
   public = list(
     `missingHeaders` = NULL,
+    `emptyHeaders` = NULL,
     `invalidHeaderURIs` = NULL,
     `datatypeErrors` = NULL,
     `uriNotFoundErrors` = NULL,
@@ -50,7 +57,12 @@ DataCSVValidationModel <- R6::R6Class(
     `invalidObjectErrors` = NULL,
     `invalidDateErrors` = NULL,
     `invalidDataTypeErrors` = NULL,
+    `invalidExperimentErrors` = NULL,
+    `invalidDeviceErrors` = NULL,
     `duplicatedDataErrors` = NULL,
+    `duplicatedObjectErrors` = NULL,
+    `duplicatedExperimentErrors` = NULL,
+    `duplicatedDeviceErrors` = NULL,
     `headers` = NULL,
     `headersLabels` = NULL,
     `nbLinesImported` = NULL,
@@ -60,11 +72,16 @@ DataCSVValidationModel <- R6::R6Class(
     `validCSV` = NULL,
     `tooLargeDataset` = NULL,
     `errorMessage` = NULL,
-    initialize = function(`missingHeaders`, `invalidHeaderURIs`, `datatypeErrors`, `uriNotFoundErrors`, `invalidURIErrors`, `missingRequiredValueErrors`, `invalidValueErrors`, `alreadyExistingURIErrors`, `duplicateURIErrors`, `invalidObjectErrors`, `invalidDateErrors`, `invalidDataTypeErrors`, `duplicatedDataErrors`, `headers`, `headersLabels`, `nbLinesImported`, `nbLinesToImport`, `validationStep`, `insertionStep`, `validCSV`, `tooLargeDataset`, `errorMessage`){
+    initialize = function(`missingHeaders`, `emptyHeaders`, `invalidHeaderURIs`, `datatypeErrors`, `uriNotFoundErrors`, `invalidURIErrors`, `missingRequiredValueErrors`, `invalidValueErrors`, `alreadyExistingURIErrors`, `duplicateURIErrors`, `invalidObjectErrors`, `invalidDateErrors`, `invalidDataTypeErrors`, `invalidExperimentErrors`, `invalidDeviceErrors`, `duplicatedDataErrors`, `duplicatedObjectErrors`, `duplicatedExperimentErrors`, `duplicatedDeviceErrors`, `headers`, `headersLabels`, `nbLinesImported`, `nbLinesToImport`, `validationStep`, `insertionStep`, `validCSV`, `tooLargeDataset`, `errorMessage`){
       if (!missing(`missingHeaders`)) {
         stopifnot(is.list(`missingHeaders`), length(`missingHeaders`) != 0)
         lapply(`missingHeaders`, function(x) stopifnot(is.character(x)))
         self$`missingHeaders` <- `missingHeaders`
+      }
+      if (!missing(`emptyHeaders`)) {
+        stopifnot(is.list(`emptyHeaders`), length(`emptyHeaders`) != 0)
+        lapply(`emptyHeaders`, function(x) stopifnot(is.character(x)))
+        self$`emptyHeaders` <- `emptyHeaders`
       }
       if (!missing(`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- `invalidHeaderURIs`
@@ -109,9 +126,29 @@ DataCSVValidationModel <- R6::R6Class(
         stopifnot(R6::is.R6(`invalidDataTypeErrors`))
         self$`invalidDataTypeErrors` <- `invalidDataTypeErrors`
       }
+      if (!missing(`invalidExperimentErrors`)) {
+        stopifnot(R6::is.R6(`invalidExperimentErrors`))
+        self$`invalidExperimentErrors` <- `invalidExperimentErrors`
+      }
+      if (!missing(`invalidDeviceErrors`)) {
+        stopifnot(R6::is.R6(`invalidDeviceErrors`))
+        self$`invalidDeviceErrors` <- `invalidDeviceErrors`
+      }
       if (!missing(`duplicatedDataErrors`)) {
         stopifnot(R6::is.R6(`duplicatedDataErrors`))
         self$`duplicatedDataErrors` <- `duplicatedDataErrors`
+      }
+      if (!missing(`duplicatedObjectErrors`)) {
+        stopifnot(R6::is.R6(`duplicatedObjectErrors`))
+        self$`duplicatedObjectErrors` <- `duplicatedObjectErrors`
+      }
+      if (!missing(`duplicatedExperimentErrors`)) {
+        stopifnot(R6::is.R6(`duplicatedExperimentErrors`))
+        self$`duplicatedExperimentErrors` <- `duplicatedExperimentErrors`
+      }
+      if (!missing(`duplicatedDeviceErrors`)) {
+        stopifnot(R6::is.R6(`duplicatedDeviceErrors`))
+        self$`duplicatedDeviceErrors` <- `duplicatedDeviceErrors`
       }
       if (!missing(`headers`)) {
         stopifnot(is.list(`headers`), length(`headers`) != 0)
@@ -153,6 +190,9 @@ DataCSVValidationModel <- R6::R6Class(
       if (!is.null(self$`missingHeaders`)) {
         DataCSVValidationModelObject[['missingHeaders']] <- self$`missingHeaders`
       }
+      if (!is.null(self$`emptyHeaders`)) {
+        DataCSVValidationModelObject[['emptyHeaders']] <- self$`emptyHeaders`
+      }
       if (!is.null(self$`invalidHeaderURIs`)) {
         DataCSVValidationModelObject[['invalidHeaderURIs']] <- self$`invalidHeaderURIs`
       }
@@ -186,8 +226,23 @@ DataCSVValidationModel <- R6::R6Class(
       if (!is.null(self$`invalidDataTypeErrors`)) {
         DataCSVValidationModelObject[['invalidDataTypeErrors']] <- self$`invalidDataTypeErrors`$toJSON()
       }
+      if (!is.null(self$`invalidExperimentErrors`)) {
+        DataCSVValidationModelObject[['invalidExperimentErrors']] <- self$`invalidExperimentErrors`$toJSON()
+      }
+      if (!is.null(self$`invalidDeviceErrors`)) {
+        DataCSVValidationModelObject[['invalidDeviceErrors']] <- self$`invalidDeviceErrors`$toJSON()
+      }
       if (!is.null(self$`duplicatedDataErrors`)) {
         DataCSVValidationModelObject[['duplicatedDataErrors']] <- self$`duplicatedDataErrors`$toJSON()
+      }
+      if (!is.null(self$`duplicatedObjectErrors`)) {
+        DataCSVValidationModelObject[['duplicatedObjectErrors']] <- self$`duplicatedObjectErrors`$toJSON()
+      }
+      if (!is.null(self$`duplicatedExperimentErrors`)) {
+        DataCSVValidationModelObject[['duplicatedExperimentErrors']] <- self$`duplicatedExperimentErrors`$toJSON()
+      }
+      if (!is.null(self$`duplicatedDeviceErrors`)) {
+        DataCSVValidationModelObject[['duplicatedDeviceErrors']] <- self$`duplicatedDeviceErrors`$toJSON()
       }
       if (!is.null(self$`headers`)) {
         DataCSVValidationModelObject[['headers']] <- self$`headers`
@@ -224,6 +279,9 @@ DataCSVValidationModel <- R6::R6Class(
       if (!is.null(DataCSVValidationModelObject$`missingHeaders`)) {
         self$`missingHeaders` <- DataCSVValidationModelObject$`missingHeaders`
       }
+      if (!is.null(DataCSVValidationModelObject$`emptyHeaders`)) {
+        self$`emptyHeaders` <- DataCSVValidationModelObject$`emptyHeaders`
+      }
       if (!is.null(DataCSVValidationModelObject$`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- DataCSVValidationModelObject$`invalidHeaderURIs`
       }
@@ -277,10 +335,35 @@ DataCSVValidationModel <- R6::R6Class(
         invalidDataTypeErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDataTypeErrors, auto_unbox = TRUE, null = "null"))
         self$`invalidDataTypeErrors` <- invalidDataTypeErrorsObject
       }
+      if (!is.null(DataCSVValidationModelObject$`invalidExperimentErrors`)) {
+        invalidExperimentErrorsObject <- CSVCell$new()
+        invalidExperimentErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidExperimentErrors, auto_unbox = TRUE, null = "null"))
+        self$`invalidExperimentErrors` <- invalidExperimentErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`invalidDeviceErrors`)) {
+        invalidDeviceErrorsObject <- CSVCell$new()
+        invalidDeviceErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDeviceErrors, auto_unbox = TRUE, null = "null"))
+        self$`invalidDeviceErrors` <- invalidDeviceErrorsObject
+      }
       if (!is.null(DataCSVValidationModelObject$`duplicatedDataErrors`)) {
         duplicatedDataErrorsObject <- CSVCell$new()
         duplicatedDataErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDataErrors, auto_unbox = TRUE, null = "null"))
         self$`duplicatedDataErrors` <- duplicatedDataErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedObjectErrors`)) {
+        duplicatedObjectErrorsObject <- CSVCell$new()
+        duplicatedObjectErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedObjectErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedObjectErrors` <- duplicatedObjectErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedExperimentErrors`)) {
+        duplicatedExperimentErrorsObject <- CSVCell$new()
+        duplicatedExperimentErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedExperimentErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedExperimentErrors` <- duplicatedExperimentErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedDeviceErrors`)) {
+        duplicatedDeviceErrorsObject <- CSVCell$new()
+        duplicatedDeviceErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDeviceErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedDeviceErrors` <- duplicatedDeviceErrorsObject
       }
       if (!is.null(DataCSVValidationModelObject$`headers`)) {
         self$`headers` <- DataCSVValidationModelObject$`headers`
@@ -314,6 +397,9 @@ DataCSVValidationModel <- R6::R6Class(
       if (!is.null(DataCSVValidationModelObject$`missingHeaders`)) {
         self$`missingHeaders` <- DataCSVValidationModelObject$`missingHeaders`
       }
+      if (!is.null(DataCSVValidationModelObject$`emptyHeaders`)) {
+        self$`emptyHeaders` <- DataCSVValidationModelObject$`emptyHeaders`
+      }
       if (!is.null(DataCSVValidationModelObject$`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- DataCSVValidationModelObject$`invalidHeaderURIs`
       }
@@ -367,10 +453,35 @@ DataCSVValidationModel <- R6::R6Class(
         invalidDataTypeErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDataTypeErrors, auto_unbox = TRUE, null = "null"))
         self$`invalidDataTypeErrors` <- invalidDataTypeErrorsObject
       }
+      if (!is.null(DataCSVValidationModelObject$`invalidExperimentErrors`)) {
+        invalidExperimentErrorsObject <- CSVCell$new()
+        invalidExperimentErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidExperimentErrors, auto_unbox = TRUE, null = "null"))
+        self$`invalidExperimentErrors` <- invalidExperimentErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`invalidDeviceErrors`)) {
+        invalidDeviceErrorsObject <- CSVCell$new()
+        invalidDeviceErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDeviceErrors, auto_unbox = TRUE, null = "null"))
+        self$`invalidDeviceErrors` <- invalidDeviceErrorsObject
+      }
       if (!is.null(DataCSVValidationModelObject$`duplicatedDataErrors`)) {
         duplicatedDataErrorsObject <- CSVCell$new()
         duplicatedDataErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDataErrors, auto_unbox = TRUE, null = "null"))
         self$`duplicatedDataErrors` <- duplicatedDataErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedObjectErrors`)) {
+        duplicatedObjectErrorsObject <- CSVCell$new()
+        duplicatedObjectErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedObjectErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedObjectErrors` <- duplicatedObjectErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedExperimentErrors`)) {
+        duplicatedExperimentErrorsObject <- CSVCell$new()
+        duplicatedExperimentErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedExperimentErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedExperimentErrors` <- duplicatedExperimentErrorsObject
+      }
+      if (!is.null(DataCSVValidationModelObject$`duplicatedDeviceErrors`)) {
+        duplicatedDeviceErrorsObject <- CSVCell$new()
+        duplicatedDeviceErrorsObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDeviceErrors, auto_unbox = TRUE, null = "null"))
+        self$`duplicatedDeviceErrors` <- duplicatedDeviceErrorsObject
       }
       if (!is.null(DataCSVValidationModelObject$`headers`)) {
         self$`headers` <- DataCSVValidationModelObject$`headers`
@@ -404,6 +515,7 @@ DataCSVValidationModel <- R6::R6Class(
        sprintf(
         '{
            "missingHeaders": [%s],
+           "emptyHeaders": [%s],
            "invalidHeaderURIs": %s,
            "datatypeErrors": %s,
            "uriNotFoundErrors": %s,
@@ -415,7 +527,12 @@ DataCSVValidationModel <- R6::R6Class(
            "invalidObjectErrors": %s,
            "invalidDateErrors": %s,
            "invalidDataTypeErrors": %s,
+           "invalidExperimentErrors": %s,
+           "invalidDeviceErrors": %s,
            "duplicatedDataErrors": %s,
+           "duplicatedObjectErrors": %s,
+           "duplicatedExperimentErrors": %s,
+           "duplicatedDeviceErrors": %s,
            "headers": [%s],
            "headersLabels": [%s],
            "nbLinesImported": %s,
@@ -427,6 +544,7 @@ DataCSVValidationModel <- R6::R6Class(
            "errorMessage": %s
         }',
         ifelse(is.null(self$`missingHeaders`) || length(self$`missingHeaders`) == 0, "" ,lapply(self$`missingHeaders`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`emptyHeaders`) || length(self$`emptyHeaders`) == 0, "" ,lapply(self$`emptyHeaders`, function(x) paste(paste0('"', x, '"'), sep=","))),
         ifelse(is.null(self$`invalidHeaderURIs`), "null",jsonlite::toJSON(self$`invalidHeaderURIs`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`datatypeErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`uriNotFoundErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
@@ -438,7 +556,12 @@ DataCSVValidationModel <- R6::R6Class(
         jsonlite::toJSON(self$`invalidObjectErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`invalidDateErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`invalidDataTypeErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`invalidExperimentErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`invalidDeviceErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`duplicatedDataErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`duplicatedObjectErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`duplicatedExperimentErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`duplicatedDeviceErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`headers`) || length(self$`headers`) == 0, "" ,lapply(self$`headers`, function(x) paste(paste0('"', x, '"'), sep=","))),
         ifelse(is.null(self$`headersLabels`) || length(self$`headersLabels`) == 0, "" ,lapply(self$`headersLabels`, function(x) paste(paste0('"', x, '"'), sep=","))),
         ifelse(is.null(self$`nbLinesImported`), "null",as.numeric(jsonlite::toJSON(self$`nbLinesImported`,auto_unbox=TRUE, null = "null"))),
@@ -453,6 +576,7 @@ DataCSVValidationModel <- R6::R6Class(
     fromJSONString = function(DataCSVValidationModelJson) {
       DataCSVValidationModelObject <- jsonlite::fromJSON(DataCSVValidationModelJson)
       self$`missingHeaders` <- DataCSVValidationModelObject$`missingHeaders`
+      self$`emptyHeaders` <- DataCSVValidationModelObject$`emptyHeaders`
       self$`invalidHeaderURIs` <- DataCSVValidationModelObject$`invalidHeaderURIs`
       CSVDatatypeErrorObject <- CSVDatatypeError$new()
       self$`datatypeErrors` <- CSVDatatypeErrorObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$datatypeErrors, auto_unbox = TRUE))
@@ -475,7 +599,17 @@ DataCSVValidationModel <- R6::R6Class(
       CSVCellObject <- CSVCell$new()
       self$`invalidDataTypeErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDataTypeErrors, auto_unbox = TRUE))
       CSVCellObject <- CSVCell$new()
+      self$`invalidExperimentErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidExperimentErrors, auto_unbox = TRUE))
+      CSVCellObject <- CSVCell$new()
+      self$`invalidDeviceErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$invalidDeviceErrors, auto_unbox = TRUE))
+      CSVCellObject <- CSVCell$new()
       self$`duplicatedDataErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDataErrors, auto_unbox = TRUE))
+      CSVCellObject <- CSVCell$new()
+      self$`duplicatedObjectErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedObjectErrors, auto_unbox = TRUE))
+      CSVCellObject <- CSVCell$new()
+      self$`duplicatedExperimentErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedExperimentErrors, auto_unbox = TRUE))
+      CSVCellObject <- CSVCell$new()
+      self$`duplicatedDeviceErrors` <- CSVCellObject$fromJSON(jsonlite::toJSON(DataCSVValidationModelObject$duplicatedDeviceErrors, auto_unbox = TRUE))
       self$`headers` <- DataCSVValidationModelObject$`headers`
       self$`headersLabels` <- DataCSVValidationModelObject$`headersLabels`
       self$`nbLinesImported` <- DataCSVValidationModelObject$`nbLinesImported`

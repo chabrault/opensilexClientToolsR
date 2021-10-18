@@ -19,6 +19,7 @@
 #' @field trait_name 
 #' @field method 
 #' @field unit 
+#' @field species 
 #' @field time_interval 
 #' @field sampling_interval 
 #' @field datatype 
@@ -43,6 +44,7 @@ VariableDetailsDTO <- R6::R6Class(
     `trait_name` = NULL,
     `method` = NULL,
     `unit` = NULL,
+    `species` = NULL,
     `time_interval` = NULL,
     `sampling_interval` = NULL,
     `datatype` = NULL,
@@ -50,7 +52,7 @@ VariableDetailsDTO <- R6::R6Class(
     `close_match` = NULL,
     `broad_match` = NULL,
     `narrow_match` = NULL,
-    initialize = function(`uri`, `name`, `alternative_name`, `description`, `entity`, `characteristic`, `trait`, `trait_name`, `method`, `unit`, `time_interval`, `sampling_interval`, `datatype`, `exact_match`, `close_match`, `broad_match`, `narrow_match`){
+    initialize = function(`uri`, `name`, `alternative_name`, `description`, `entity`, `characteristic`, `trait`, `trait_name`, `method`, `unit`, `species`, `time_interval`, `sampling_interval`, `datatype`, `exact_match`, `close_match`, `broad_match`, `narrow_match`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -90,6 +92,10 @@ VariableDetailsDTO <- R6::R6Class(
       if (!missing(`unit`)) {
         stopifnot(R6::is.R6(`unit`))
         self$`unit` <- `unit`
+      }
+      if (!missing(`species`)) {
+        stopifnot(R6::is.R6(`species`))
+        self$`species` <- `species`
       }
       if (!missing(`time_interval`)) {
         stopifnot(is.character(`time_interval`), length(`time_interval`) == 1)
@@ -156,6 +162,9 @@ VariableDetailsDTO <- R6::R6Class(
       if (!is.null(self$`unit`)) {
         VariableDetailsDTOObject[['unit']] <- self$`unit`$toJSON()
       }
+      if (!is.null(self$`species`)) {
+        VariableDetailsDTOObject[['species']] <- self$`species`$toJSON()
+      }
       if (!is.null(self$`time_interval`)) {
         VariableDetailsDTOObject[['time_interval']] <- self$`time_interval`
       }
@@ -220,6 +229,11 @@ VariableDetailsDTO <- R6::R6Class(
         unitObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$unit, auto_unbox = TRUE, null = "null"))
         self$`unit` <- unitObject
       }
+      if (!is.null(VariableDetailsDTOObject$`species`)) {
+        speciesObject <- SpeciesDTO$new()
+        speciesObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$species, auto_unbox = TRUE, null = "null"))
+        self$`species` <- speciesObject
+      }
       if (!is.null(VariableDetailsDTOObject$`time_interval`)) {
         self$`time_interval` <- VariableDetailsDTOObject$`time_interval`
       }
@@ -281,6 +295,11 @@ VariableDetailsDTO <- R6::R6Class(
         unitObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$unit, auto_unbox = TRUE, null = "null"))
         self$`unit` <- unitObject
       }
+      if (!is.null(VariableDetailsDTOObject$`species`)) {
+        speciesObject <- SpeciesDTO$new()
+        speciesObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$species, auto_unbox = TRUE, null = "null"))
+        self$`species` <- speciesObject
+      }
       if (!is.null(VariableDetailsDTOObject$`time_interval`)) {
         self$`time_interval` <- VariableDetailsDTOObject$`time_interval`
       }
@@ -316,6 +335,7 @@ VariableDetailsDTO <- R6::R6Class(
            "trait_name": %s,
            "method": %s,
            "unit": %s,
+           "species": %s,
            "time_interval": %s,
            "sampling_interval": %s,
            "datatype": %s,
@@ -334,6 +354,7 @@ VariableDetailsDTO <- R6::R6Class(
         ifelse(is.null(self$`trait_name`), "null",jsonlite::toJSON(self$`trait_name`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`method`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`unit`$toJSON(),auto_unbox=TRUE, null = "null"),
+        jsonlite::toJSON(self$`species`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`time_interval`), "null",jsonlite::toJSON(self$`time_interval`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`sampling_interval`), "null",jsonlite::toJSON(self$`sampling_interval`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`datatype`), "null",jsonlite::toJSON(self$`datatype`,auto_unbox=TRUE, null = "null")),
@@ -359,6 +380,8 @@ VariableDetailsDTO <- R6::R6Class(
       self$`method` <- MethodGetDTOObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$method, auto_unbox = TRUE))
       UnitGetDTOObject <- UnitGetDTO$new()
       self$`unit` <- UnitGetDTOObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$unit, auto_unbox = TRUE))
+      SpeciesDTOObject <- SpeciesDTO$new()
+      self$`species` <- SpeciesDTOObject$fromJSON(jsonlite::toJSON(VariableDetailsDTOObject$species, auto_unbox = TRUE))
       self$`time_interval` <- VariableDetailsDTOObject$`time_interval`
       self$`sampling_interval` <- VariableDetailsDTOObject$`sampling_interval`
       self$`datatype` <- VariableDetailsDTOObject$`datatype`

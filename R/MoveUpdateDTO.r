@@ -162,7 +162,7 @@ MoveUpdateDTO <- R6::R6Class(
       }
       if (!is.null(MoveUpdateDTOObject$`targets_positions`)) {
         self$`targets_positions` <- lapply(MoveUpdateDTOObject$`targets_positions`, function(x) {
-          targets_positionsObject <- ConcernedItemPositionCreationDTO$new()
+          targets_positionsObject <- TargetPositionCreationDTO$new()
           targets_positionsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
           targets_positionsObject
         })
@@ -205,7 +205,7 @@ MoveUpdateDTO <- R6::R6Class(
       }
       if (!is.null(MoveUpdateDTOObject$`targets_positions`)) {
         self$`targets_positions` <- lapply(MoveUpdateDTOObject$`targets_positions`, function(x) {
-          targets_positionsObject <- ConcernedItemPositionCreationDTO$new()
+          targets_positionsObject <- TargetPositionCreationDTO$new()
           targets_positionsObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
           targets_positionsObject
         })
@@ -253,7 +253,7 @@ MoveUpdateDTO <- R6::R6Class(
       self$`relations` <- lapply(MoveUpdateDTOObject$`relations`, function(x) RDFObjectRelationDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
       self$`from` <- MoveUpdateDTOObject$`from`
       self$`to` <- MoveUpdateDTOObject$`to`
-      self$`targets_positions` <- lapply(MoveUpdateDTOObject$`targets_positions`, function(x) ConcernedItemPositionCreationDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
+      self$`targets_positions` <- lapply(MoveUpdateDTOObject$`targets_positions`, function(x) TargetPositionCreationDTO$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
     }
   )
 )

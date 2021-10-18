@@ -18,6 +18,9 @@
 #' @section Methods:
 #' \describe{
 #'
+#' count_events Count events
+#'
+#'
 #' create_events Create a list of event
 #'
 #'
@@ -39,10 +42,10 @@
 #' get_move_event Get a move with all it&#39;s properties
 #'
 #'
-#' import_event_csv Import a CSV file with one move and one concerned item per line
+#' import_event_csv Import a CSV file with one move and one target per line
 #'
 #'
-#' import_move_csv Import a CSV file with one move and one concerned item per line
+#' import_move_csv Import a CSV file with one move and one target per line
 #'
 #'
 #' search_events Search events
@@ -54,10 +57,10 @@
 #' update_move_event Update a move event
 #'
 #'
-#' validate_event_csv Check a CSV file with one move and one concerned item per line
+#' validate_event_csv Check a CSV file with one move and one target per line
 #'
 #'
-#' validate_move_csv Check a CSV file with one move and one concerned item per line
+#' validate_move_csv Check a CSV file with one move and one target per line
 #'
 #' }
 #'
@@ -65,7 +68,7 @@
 EventsApi <- R6::R6Class(
   'EventsApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -74,6 +77,61 @@ EventsApi <- R6::R6Class(
       else {
         self$apiClient <- ApiClient$new()
       }
+    },
+    count_events = function(targets,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      urlPath <- "/core/events/count"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- Integer$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
     },
     create_events = function(body,...){
       args <- list(...)

@@ -11,6 +11,7 @@
 #'
 #' @field uri 
 #' @field prov_used 
+#' @field prov_was_associated_with 
 #' @field settings 
 #' @field experiments 
 #'
@@ -22,9 +23,10 @@ DataProvenanceModel <- R6::R6Class(
   public = list(
     `uri` = NULL,
     `prov_used` = NULL,
+    `prov_was_associated_with` = NULL,
     `settings` = NULL,
     `experiments` = NULL,
-    initialize = function(`uri`, `prov_used`, `settings`, `experiments`){
+    initialize = function(`uri`, `prov_used`, `prov_was_associated_with`, `settings`, `experiments`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -33,6 +35,11 @@ DataProvenanceModel <- R6::R6Class(
         stopifnot(is.list(`prov_used`), length(`prov_used`) != 0)
         lapply(`prov_used`, function(x) stopifnot(R6::is.R6(x)))
         self$`prov_used` <- `prov_used`
+      }
+      if (!missing(`prov_was_associated_with`)) {
+        stopifnot(is.list(`prov_was_associated_with`), length(`prov_was_associated_with`) != 0)
+        lapply(`prov_was_associated_with`, function(x) stopifnot(R6::is.R6(x)))
+        self$`prov_was_associated_with` <- `prov_was_associated_with`
       }
       if (!missing(`settings`)) {
         stopifnot(R6::is.R6(`settings`))
@@ -51,6 +58,9 @@ DataProvenanceModel <- R6::R6Class(
       }
       if (!is.null(self$`prov_used`)) {
         DataProvenanceModelObject[['prov_used']] <- lapply(self$`prov_used`, function(x) x$toJSON())
+      }
+      if (!is.null(self$`prov_was_associated_with`)) {
+        DataProvenanceModelObject[['prov_was_associated_with']] <- lapply(self$`prov_was_associated_with`, function(x) x$toJSON())
       }
       if (!is.null(self$`settings`)) {
         DataProvenanceModelObject[['settings']] <- self$`settings`$toJSON()
@@ -73,6 +83,13 @@ DataProvenanceModel <- R6::R6Class(
           prov_usedObject
         })
       }
+      if (!is.null(DataProvenanceModelObject$`prov_was_associated_with`)) {
+        self$`prov_was_associated_with` <- lapply(DataProvenanceModelObject$`prov_was_associated_with`, function(x) {
+          prov_was_associated_withObject <- ProvEntityModel$new()
+          prov_was_associated_withObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          prov_was_associated_withObject
+        })
+      }
       if (!is.null(DataProvenanceModelObject$`settings`)) {
         settingsObject <- ObjectDTO$new()
         settingsObject$fromJSON(jsonlite::toJSON(DataProvenanceModelObject$settings, auto_unbox = TRUE, null = "null"))
@@ -93,6 +110,13 @@ DataProvenanceModel <- R6::R6Class(
           prov_usedObject
         })
       }
+      if (!is.null(DataProvenanceModelObject$`prov_was_associated_with`)) {
+        self$`prov_was_associated_with` <- lapply(DataProvenanceModelObject$`prov_was_associated_with`, function(x) {
+          prov_was_associated_withObject <- ProvEntityModel$new()
+          prov_was_associated_withObject$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE, null = "null"))
+          prov_was_associated_withObject
+        })
+      }
       if (!is.null(DataProvenanceModelObject$`settings`)) {
         settingsObject <- ObjectDTO$new()
         settingsObject$fromJSON(jsonlite::toJSON(DataProvenanceModelObject$settings, auto_unbox = TRUE, null = "null"))
@@ -104,15 +128,18 @@ DataProvenanceModel <- R6::R6Class(
     },
     toJSONString = function() {
       prov_usedList = paste(lapply(self$`prov_used`, function(x) x$toJSONString()),collapse = ",")
+      prov_was_associated_withList = paste(lapply(self$`prov_was_associated_with`, function(x) x$toJSONString()),collapse = ",")
        sprintf(
         '{
            "uri": %s,
            "prov_used": [%s],
+           "prov_was_associated_with": [%s],
            "settings": %s,
            "experiments": [%s]
         }',
         ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
         prov_usedList,
+        prov_was_associated_withList,
         jsonlite::toJSON(self$`settings`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`experiments`) || length(self$`experiments`) == 0, "" ,lapply(self$`experiments`, function(x) paste(paste0('"', x, '"'), sep=",")))
       )
@@ -121,6 +148,7 @@ DataProvenanceModel <- R6::R6Class(
       DataProvenanceModelObject <- jsonlite::fromJSON(DataProvenanceModelJson)
       self$`uri` <- DataProvenanceModelObject$`uri`
       self$`prov_used` <- lapply(DataProvenanceModelObject$`prov_used`, function(x) ProvEntityModel$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
+      self$`prov_was_associated_with` <- lapply(DataProvenanceModelObject$`prov_was_associated_with`, function(x) ProvEntityModel$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
       ObjectDTOObject <- ObjectDTO$new()
       self$`settings` <- ObjectDTOObject$fromJSON(jsonlite::toJSON(DataProvenanceModelObject$settings, auto_unbox = TRUE))
       self$`experiments` <- DataProvenanceModelObject$`experiments`

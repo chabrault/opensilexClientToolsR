@@ -38,7 +38,7 @@
 AreaApi <- R6::R6Class(
   'AreaApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -221,7 +221,7 @@ AreaApi <- R6::R6Class(
       }
 
     },
-    search_intersects = function(body,...){
+    search_intersects = function(body,start,end,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -236,6 +236,14 @@ AreaApi <- R6::R6Class(
       #if (!missing(`accept_language`)) {
       #  headerParams['Accept-Language'] <- accept_language
       #}
+
+      if (!missing(`start`)) {
+        queryParams['start'] <- start
+      }
+
+      if (!missing(`end`)) {
+        queryParams['end'] <- end
+      }
 
       if (!missing(`body`)) {
         if(is.list(`body`)){

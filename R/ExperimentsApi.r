@@ -24,7 +24,7 @@
 #' delete_experiment Delete an experiment
 #'
 #'
-#' export_experiment_data_list export data
+#' export_experiment_data_list export experiment data
 #'
 #'
 #' get_available_facilities Get facilities available for an experiment
@@ -39,13 +39,16 @@
 #' get_experiment Get an experiment
 #'
 #'
+#' get_experiments_by_ur_is Get experiments URIs
+#'
+#'
 #' get_facilities Get facilities involved in an experiment
 #'
 #'
-#' get_used_variables Get variables involved in an experiment
+#' get_used_variables1 Get variables involved in an experiment
 #'
 #'
-#' import_csv_data Import a CSV file for the given experiment URI and scientific object type.
+#' import_csv_data1 Import a CSV file for the given experiment URI and scientific object type.
 #'
 #'
 #' search_experiment_data_list Search data
@@ -60,7 +63,7 @@
 #' update_experiment Update an experiment
 #'
 #'
-#' validate_csv Import a CSV file for the given experiment URI and scientific object type.
+#' validate_csv1 Import a CSV file for the given experiment URI and scientific object type.
 #'
 #' }
 #'
@@ -68,7 +71,7 @@
 ExperimentsApi <- R6::R6Class(
   'ExperimentsApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -507,6 +510,61 @@ ExperimentsApi <- R6::R6Class(
       }
 
     },
+    get_experiments_by_ur_is = function(uris,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`uris`)) {
+        queryParams['uris'] <- uris
+      }
+
+      urlPath <- "/core/experiments/by_uris"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ExperimentGetListDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
     get_facilities = function(uri,...){
       args <- list(...)
       queryParams <- list()
@@ -562,7 +620,7 @@ ExperimentsApi <- R6::R6Class(
       }
 
     },
-    get_used_variables = function(uri,scientific_objects,...){
+    get_used_variables1 = function(uri,scientific_objects,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -621,7 +679,7 @@ ExperimentsApi <- R6::R6Class(
       }
 
     },
-    import_csv_data = function(uri,provenance,file,...){
+    import_csv_data1 = function(uri,provenance,file,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -1032,7 +1090,7 @@ ExperimentsApi <- R6::R6Class(
       }
 
     },
-    validate_csv = function(uri,provenance,file,...){
+    validate_csv1 = function(uri,provenance,file,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()

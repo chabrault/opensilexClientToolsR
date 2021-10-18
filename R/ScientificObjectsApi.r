@@ -63,7 +63,7 @@
 #' update_scientific_object Update a scientific object for the given experiment
 #'
 #'
-#' validate_csv1 Validate a CSV file for the given experiment URI and scientific object type.
+#' validate_csv2 Validate a CSV file for the given experiment URI and scientific object type.
 #'
 #' }
 #'
@@ -71,7 +71,7 @@
 ScientificObjectsApi <- R6::R6Class(
   'ScientificObjectsApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -529,7 +529,7 @@ ScientificObjectsApi <- R6::R6Class(
       }
 
     },
-    get_scientific_objects_children = function(parent,experiment,facility,order_by,page,page_size,...){
+    get_scientific_objects_children = function(parent,experiment,rdf_types,name,factor_levels,facility,order_by,page,page_size,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -553,6 +553,18 @@ ScientificObjectsApi <- R6::R6Class(
         queryParams['experiment'] <- experiment
       }
 
+      if (!missing(`rdf_types`)) {
+        queryParams['rdf_types'] <- rdf_types
+      }
+
+      if (!missing(`name`)) {
+        queryParams['name'] <- name
+      }
+
+      if (!missing(`factor_levels`)) {
+        queryParams['factor_levels'] <- factor_levels
+      }
+
       if (!missing(`facility`)) {
         queryParams['facility'] <- facility
       }
@@ -566,7 +578,7 @@ ScientificObjectsApi <- R6::R6Class(
       }
 
       if (!missing(`page_size`)) {
-        queryParams['pageSize'] <- page_size
+        queryParams['page_size'] <- page_size
       }
 
       urlPath <- "/core/scientific_objects/children"
@@ -843,7 +855,7 @@ ScientificObjectsApi <- R6::R6Class(
       }
 
       if (!missing(`page_size`)) {
-        queryParams['pageSize'] <- page_size
+        queryParams['page_size'] <- page_size
       }
 
       urlPath <- "/core/scientific_objects"
@@ -881,7 +893,7 @@ ScientificObjectsApi <- R6::R6Class(
       }
 
     },
-    search_scientific_objects_with_geometry_list_by_uris = function(experiment,...){
+    search_scientific_objects_with_geometry_list_by_uris = function(experiment,start_date,end_date,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -899,6 +911,14 @@ ScientificObjectsApi <- R6::R6Class(
 
       if (!missing(`experiment`)) {
         queryParams['experiment'] <- experiment
+      }
+
+      if (!missing(`start_date`)) {
+        queryParams['start_date'] <- start_date
+      }
+
+      if (!missing(`end_date`)) {
+        queryParams['end_date'] <- end_date
       }
 
       urlPath <- "/core/scientific_objects/geometry"
@@ -999,7 +1019,7 @@ ScientificObjectsApi <- R6::R6Class(
       }
 
     },
-    validate_csv1 = function(description,file,...){
+    validate_csv2 = function(description,file,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()

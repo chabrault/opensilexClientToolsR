@@ -29,7 +29,7 @@
 PositionsApi <- R6::R6Class(
   'PositionsApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -98,7 +98,7 @@ PositionsApi <- R6::R6Class(
       }
 
     },
-    search_position_history = function(concerned_item_uri,start_date_time,end_date_time,order_by,page,page_size,...){
+    search_position_history = function(target,start_date_time,end_date_time,order_by,page,page_size,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -114,8 +114,8 @@ PositionsApi <- R6::R6Class(
       #  headerParams['Accept-Language'] <- accept_language
       #}
 
-      if (!missing(`concerned_item_uri`)) {
-        queryParams['concernedItemUri'] <- concerned_item_uri
+      if (!missing(`target`)) {
+        queryParams['target'] <- target
       }
 
       if (!missing(`start_date_time`)) {

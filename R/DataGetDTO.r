@@ -11,7 +11,7 @@
 #'
 #' @field uri 
 #' @field date 
-#' @field scientific_object 
+#' @field target 
 #' @field variable 
 #' @field value 
 #' @field confidence 
@@ -27,14 +27,14 @@ DataGetDTO <- R6::R6Class(
   public = list(
     `uri` = NULL,
     `date` = NULL,
-    `scientific_object` = NULL,
+    `target` = NULL,
     `variable` = NULL,
     `value` = NULL,
     `confidence` = NULL,
     `provenance` = NULL,
     `metadata` = NULL,
     `raw_data` = NULL,
-    initialize = function(`uri`, `date`, `scientific_object`, `variable`, `value`, `confidence`, `provenance`, `metadata`, `raw_data`){
+    initialize = function(`uri`, `date`, `target`, `variable`, `value`, `confidence`, `provenance`, `metadata`, `raw_data`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -43,9 +43,9 @@ DataGetDTO <- R6::R6Class(
         stopifnot(is.character(`date`), length(`date`) == 1)
         self$`date` <- `date`
       }
-      if (!missing(`scientific_object`)) {
-        stopifnot(is.character(`scientific_object`), length(`scientific_object`) == 1)
-        self$`scientific_object` <- `scientific_object`
+      if (!missing(`target`)) {
+        stopifnot(is.character(`target`), length(`target`) == 1)
+        self$`target` <- `target`
       }
       if (!missing(`variable`)) {
         stopifnot(is.character(`variable`), length(`variable`) == 1)
@@ -81,8 +81,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(self$`date`)) {
         DataGetDTOObject[['date']] <- self$`date`
       }
-      if (!is.null(self$`scientific_object`)) {
-        DataGetDTOObject[['scientific_object']] <- self$`scientific_object`
+      if (!is.null(self$`target`)) {
+        DataGetDTOObject[['target']] <- self$`target`
       }
       if (!is.null(self$`variable`)) {
         DataGetDTOObject[['variable']] <- self$`variable`
@@ -113,8 +113,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(DataGetDTOObject$`date`)) {
         self$`date` <- DataGetDTOObject$`date`
       }
-      if (!is.null(DataGetDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataGetDTOObject$`scientific_object`
+      if (!is.null(DataGetDTOObject$`target`)) {
+        self$`target` <- DataGetDTOObject$`target`
       }
       if (!is.null(DataGetDTOObject$`variable`)) {
         self$`variable` <- DataGetDTOObject$`variable`
@@ -152,8 +152,8 @@ DataGetDTO <- R6::R6Class(
       if (!is.null(DataGetDTOObject$`date`)) {
         self$`date` <- DataGetDTOObject$`date`
       }
-      if (!is.null(DataGetDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataGetDTOObject$`scientific_object`
+      if (!is.null(DataGetDTOObject$`target`)) {
+        self$`target` <- DataGetDTOObject$`target`
       }
       if (!is.null(DataGetDTOObject$`variable`)) {
         self$`variable` <- DataGetDTOObject$`variable`
@@ -190,7 +190,7 @@ DataGetDTO <- R6::R6Class(
         '{
            "uri": %s,
            "date": %s,
-           "scientific_object": %s,
+           "target": %s,
            "variable": %s,
            "value": %s,
            "confidence": %s,
@@ -200,7 +200,7 @@ DataGetDTO <- R6::R6Class(
         }',
         ifelse(is.null(self$`uri`), "null",jsonlite::toJSON(self$`uri`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
-        ifelse(is.null(self$`scientific_object`), "null",jsonlite::toJSON(self$`scientific_object`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`target`), "null",jsonlite::toJSON(self$`target`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`variable`), "null",jsonlite::toJSON(self$`variable`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`value`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`confidence`), "null",as.numeric(jsonlite::toJSON(self$`confidence`,auto_unbox=TRUE, null = "null"))),
@@ -213,7 +213,7 @@ DataGetDTO <- R6::R6Class(
       DataGetDTOObject <- jsonlite::fromJSON(DataGetDTOJson)
       self$`uri` <- DataGetDTOObject$`uri`
       self$`date` <- DataGetDTOObject$`date`
-      self$`scientific_object` <- DataGetDTOObject$`scientific_object`
+      self$`target` <- DataGetDTOObject$`target`
       self$`variable` <- DataGetDTOObject$`variable`
       ObjectDTOObject <- ObjectDTO$new()
       self$`value` <- ObjectDTOObject$fromJSON(jsonlite::toJSON(DataGetDTOObject$value, auto_unbox = TRUE))

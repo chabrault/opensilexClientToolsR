@@ -10,6 +10,7 @@
 #' CSVValidationModel Class
 #'
 #' @field missingHeaders 
+#' @field emptyHeaders 
 #' @field invalidHeaderURIs 
 #' @field datatypeErrors 
 #' @field uriNotFoundErrors 
@@ -26,6 +27,7 @@ CSVValidationModel <- R6::R6Class(
   'CSVValidationModel',
   public = list(
     `missingHeaders` = NULL,
+    `emptyHeaders` = NULL,
     `invalidHeaderURIs` = NULL,
     `datatypeErrors` = NULL,
     `uriNotFoundErrors` = NULL,
@@ -34,11 +36,16 @@ CSVValidationModel <- R6::R6Class(
     `invalidValueErrors` = NULL,
     `alreadyExistingURIErrors` = NULL,
     `duplicateURIErrors` = NULL,
-    initialize = function(`missingHeaders`, `invalidHeaderURIs`, `datatypeErrors`, `uriNotFoundErrors`, `invalidURIErrors`, `missingRequiredValueErrors`, `invalidValueErrors`, `alreadyExistingURIErrors`, `duplicateURIErrors`){
+    initialize = function(`missingHeaders`, `emptyHeaders`, `invalidHeaderURIs`, `datatypeErrors`, `uriNotFoundErrors`, `invalidURIErrors`, `missingRequiredValueErrors`, `invalidValueErrors`, `alreadyExistingURIErrors`, `duplicateURIErrors`){
       if (!missing(`missingHeaders`)) {
         stopifnot(is.list(`missingHeaders`), length(`missingHeaders`) != 0)
         lapply(`missingHeaders`, function(x) stopifnot(is.character(x)))
         self$`missingHeaders` <- `missingHeaders`
+      }
+      if (!missing(`emptyHeaders`)) {
+        stopifnot(is.list(`emptyHeaders`), length(`emptyHeaders`) != 0)
+        lapply(`emptyHeaders`, function(x) stopifnot(is.character(x)))
+        self$`emptyHeaders` <- `emptyHeaders`
       }
       if (!missing(`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- `invalidHeaderURIs`
@@ -77,6 +84,9 @@ CSVValidationModel <- R6::R6Class(
       if (!is.null(self$`missingHeaders`)) {
         CSVValidationModelObject[['missingHeaders']] <- self$`missingHeaders`
       }
+      if (!is.null(self$`emptyHeaders`)) {
+        CSVValidationModelObject[['emptyHeaders']] <- self$`emptyHeaders`
+      }
       if (!is.null(self$`invalidHeaderURIs`)) {
         CSVValidationModelObject[['invalidHeaderURIs']] <- self$`invalidHeaderURIs`
       }
@@ -108,6 +118,9 @@ CSVValidationModel <- R6::R6Class(
       CSVValidationModelObject <- jsonlite::fromJSON(CSVValidationModelJson)
       if (!is.null(CSVValidationModelObject$`missingHeaders`)) {
         self$`missingHeaders` <- CSVValidationModelObject$`missingHeaders`
+      }
+      if (!is.null(CSVValidationModelObject$`emptyHeaders`)) {
+        self$`emptyHeaders` <- CSVValidationModelObject$`emptyHeaders`
       }
       if (!is.null(CSVValidationModelObject$`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- CSVValidationModelObject$`invalidHeaderURIs`
@@ -152,6 +165,9 @@ CSVValidationModel <- R6::R6Class(
       if (!is.null(CSVValidationModelObject$`missingHeaders`)) {
         self$`missingHeaders` <- CSVValidationModelObject$`missingHeaders`
       }
+      if (!is.null(CSVValidationModelObject$`emptyHeaders`)) {
+        self$`emptyHeaders` <- CSVValidationModelObject$`emptyHeaders`
+      }
       if (!is.null(CSVValidationModelObject$`invalidHeaderURIs`)) {
         self$`invalidHeaderURIs` <- CSVValidationModelObject$`invalidHeaderURIs`
       }
@@ -195,6 +211,7 @@ CSVValidationModel <- R6::R6Class(
        sprintf(
         '{
            "missingHeaders": [%s],
+           "emptyHeaders": [%s],
            "invalidHeaderURIs": %s,
            "datatypeErrors": %s,
            "uriNotFoundErrors": %s,
@@ -205,6 +222,7 @@ CSVValidationModel <- R6::R6Class(
            "duplicateURIErrors": %s
         }',
         ifelse(is.null(self$`missingHeaders`) || length(self$`missingHeaders`) == 0, "" ,lapply(self$`missingHeaders`, function(x) paste(paste0('"', x, '"'), sep=","))),
+        ifelse(is.null(self$`emptyHeaders`) || length(self$`emptyHeaders`) == 0, "" ,lapply(self$`emptyHeaders`, function(x) paste(paste0('"', x, '"'), sep=","))),
         ifelse(is.null(self$`invalidHeaderURIs`), "null",jsonlite::toJSON(self$`invalidHeaderURIs`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`datatypeErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`uriNotFoundErrors`$toJSON(),auto_unbox=TRUE, null = "null"),
@@ -218,6 +236,7 @@ CSVValidationModel <- R6::R6Class(
     fromJSONString = function(CSVValidationModelJson) {
       CSVValidationModelObject <- jsonlite::fromJSON(CSVValidationModelJson)
       self$`missingHeaders` <- CSVValidationModelObject$`missingHeaders`
+      self$`emptyHeaders` <- CSVValidationModelObject$`emptyHeaders`
       self$`invalidHeaderURIs` <- CSVValidationModelObject$`invalidHeaderURIs`
       CSVDatatypeErrorObject <- CSVDatatypeError$new()
       self$`datatypeErrors` <- CSVDatatypeErrorObject$fromJSON(jsonlite::toJSON(CSVValidationModelObject$datatypeErrors, auto_unbox = TRUE))

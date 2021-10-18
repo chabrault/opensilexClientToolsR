@@ -13,7 +13,7 @@
 #' @field rdf_type 
 #' @field date 
 #' @field timezone 
-#' @field scientific_object 
+#' @field target 
 #' @field provenance 
 #' @field metadata 
 #' @field relative_path 
@@ -28,11 +28,11 @@ DataFilePathCreationDTO <- R6::R6Class(
     `rdf_type` = NULL,
     `date` = NULL,
     `timezone` = NULL,
-    `scientific_object` = NULL,
+    `target` = NULL,
     `provenance` = NULL,
     `metadata` = NULL,
     `relative_path` = NULL,
-    initialize = function(`uri`, `rdf_type`, `date`, `timezone`, `scientific_object`, `provenance`, `metadata`, `relative_path`){
+    initialize = function(`uri`, `rdf_type`, `date`, `timezone`, `target`, `provenance`, `metadata`, `relative_path`){
       if (!missing(`uri`)) {
         stopifnot(is.character(`uri`), length(`uri`) == 1)
         self$`uri` <- `uri`
@@ -49,9 +49,9 @@ DataFilePathCreationDTO <- R6::R6Class(
         stopifnot(is.character(`timezone`), length(`timezone`) == 1)
         self$`timezone` <- `timezone`
       }
-      if (!missing(`scientific_object`)) {
-        stopifnot(is.character(`scientific_object`), length(`scientific_object`) == 1)
-        self$`scientific_object` <- `scientific_object`
+      if (!missing(`target`)) {
+        stopifnot(is.character(`target`), length(`target`) == 1)
+        self$`target` <- `target`
       }
       if (!missing(`provenance`)) {
         stopifnot(R6::is.R6(`provenance`))
@@ -80,8 +80,8 @@ DataFilePathCreationDTO <- R6::R6Class(
       if (!is.null(self$`timezone`)) {
         DataFilePathCreationDTOObject[['timezone']] <- self$`timezone`
       }
-      if (!is.null(self$`scientific_object`)) {
-        DataFilePathCreationDTOObject[['scientific_object']] <- self$`scientific_object`
+      if (!is.null(self$`target`)) {
+        DataFilePathCreationDTOObject[['target']] <- self$`target`
       }
       if (!is.null(self$`provenance`)) {
         DataFilePathCreationDTOObject[['provenance']] <- self$`provenance`$toJSON()
@@ -109,8 +109,8 @@ DataFilePathCreationDTO <- R6::R6Class(
       if (!is.null(DataFilePathCreationDTOObject$`timezone`)) {
         self$`timezone` <- DataFilePathCreationDTOObject$`timezone`
       }
-      if (!is.null(DataFilePathCreationDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataFilePathCreationDTOObject$`scientific_object`
+      if (!is.null(DataFilePathCreationDTOObject$`target`)) {
+        self$`target` <- DataFilePathCreationDTOObject$`target`
       }
       if (!is.null(DataFilePathCreationDTOObject$`provenance`)) {
         provenanceObject <- DataProvenanceModel$new()
@@ -139,8 +139,8 @@ DataFilePathCreationDTO <- R6::R6Class(
       if (!is.null(DataFilePathCreationDTOObject$`timezone`)) {
         self$`timezone` <- DataFilePathCreationDTOObject$`timezone`
       }
-      if (!is.null(DataFilePathCreationDTOObject$`scientific_object`)) {
-        self$`scientific_object` <- DataFilePathCreationDTOObject$`scientific_object`
+      if (!is.null(DataFilePathCreationDTOObject$`target`)) {
+        self$`target` <- DataFilePathCreationDTOObject$`target`
       }
       if (!is.null(DataFilePathCreationDTOObject$`provenance`)) {
         provenanceObject <- DataProvenanceModel$new()
@@ -163,7 +163,7 @@ DataFilePathCreationDTO <- R6::R6Class(
            "rdf_type": %s,
            "date": %s,
            "timezone": %s,
-           "scientific_object": %s,
+           "target": %s,
            "provenance": %s,
            "metadata": %s,
            "relative_path": %s
@@ -172,7 +172,7 @@ DataFilePathCreationDTO <- R6::R6Class(
         ifelse(is.null(self$`rdf_type`), "null",jsonlite::toJSON(self$`rdf_type`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`date`), "null",jsonlite::toJSON(self$`date`,auto_unbox=TRUE, null = "null")),
         ifelse(is.null(self$`timezone`), "null",jsonlite::toJSON(self$`timezone`,auto_unbox=TRUE, null = "null")),
-        ifelse(is.null(self$`scientific_object`), "null",jsonlite::toJSON(self$`scientific_object`,auto_unbox=TRUE, null = "null")),
+        ifelse(is.null(self$`target`), "null",jsonlite::toJSON(self$`target`,auto_unbox=TRUE, null = "null")),
         jsonlite::toJSON(self$`provenance`$toJSON(),auto_unbox=TRUE, null = "null"),
         jsonlite::toJSON(self$`metadata`$toJSON(),auto_unbox=TRUE, null = "null"),
         ifelse(is.null(self$`relative_path`), "null",jsonlite::toJSON(self$`relative_path`,auto_unbox=TRUE, null = "null"))
@@ -184,7 +184,7 @@ DataFilePathCreationDTO <- R6::R6Class(
       self$`rdf_type` <- DataFilePathCreationDTOObject$`rdf_type`
       self$`date` <- DataFilePathCreationDTOObject$`date`
       self$`timezone` <- DataFilePathCreationDTOObject$`timezone`
-      self$`scientific_object` <- DataFilePathCreationDTOObject$`scientific_object`
+      self$`target` <- DataFilePathCreationDTOObject$`target`
       DataProvenanceModelObject <- DataProvenanceModel$new()
       self$`provenance` <- DataProvenanceModelObject$fromJSON(jsonlite::toJSON(DataFilePathCreationDTOObject$provenance, auto_unbox = TRUE))
       ObjectDTOObject <- ObjectDTO$new()

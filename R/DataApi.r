@@ -21,6 +21,9 @@
 #' add_list_data Add data
 #'
 #'
+#' count_data Count data
+#'
+#'
 #' create_provenance Add a provenance
 #'
 #'
@@ -31,6 +34,9 @@
 #'
 #'
 #' delete_provenance Delete a provenance that doesn&#39;t describe data
+#'
+#'
+#' export_data Export data
 #'
 #'
 #' get_data Get data
@@ -45,6 +51,9 @@
 #' get_data_file_descriptions_by_search Search data files
 #'
 #'
+#' get_datafiles_provenances Get provenances linked to datafiles
+#'
+#'
 #' get_pictures_thumbnails Get a picture thumbnail
 #'
 #'
@@ -52,6 +61,15 @@
 #'
 #'
 #' get_provenances_by_ur_is Get a list of provenances by their URIs
+#'
+#'
+#' get_used_provenances Get provenances linked to data
+#'
+#'
+#' get_used_variables Get variables linked to data
+#'
+#'
+#' import_csv_data Import a CSV file for the given provenanceURI
 #'
 #'
 #' post_data_file Add a data file
@@ -69,10 +87,13 @@
 #' update Update data
 #'
 #'
-#' update1 Update a provenance
-#'
-#'
 #' update_confidence Update confidence index
+#'
+#'
+#' update_provenance Update a provenance
+#'
+#'
+#' validate_csv Import a CSV file for the given provenanceURI.
 #'
 #' }
 #'
@@ -80,7 +101,7 @@
 DataApi <- R6::R6Class(
   'DataApi',
   public = list(
-    userAgent = "Swagger-Codegen/2.0.0/r",
+    userAgent = "Swagger-Codegen/1.0.0/r",
     apiClient = NULL,
     initialize = function(apiClient){
       if (!missing(apiClient)) {
@@ -135,6 +156,101 @@ DataApi <- R6::R6Class(
           for(i in 1:nrow(data)){
             row <- data[i,]
             returnObject <- ObjectUriResponse$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    count_data = function(start_date,end_date,timezone,experiments,targets,variables,devices,min_confidence,max_confidence,provenances,metadata,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`start_date`)) {
+        queryParams['start_date'] <- start_date
+      }
+
+      if (!missing(`end_date`)) {
+        queryParams['end_date'] <- end_date
+      }
+
+      if (!missing(`timezone`)) {
+        queryParams['timezone'] <- timezone
+      }
+
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
+      }
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`variables`)) {
+        queryParams['variables'] <- variables
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
+      }
+
+      if (!missing(`min_confidence`)) {
+        queryParams['min_confidence'] <- min_confidence
+      }
+
+      if (!missing(`max_confidence`)) {
+        queryParams['max_confidence'] <- max_confidence
+      }
+
+      if (!missing(`provenances`)) {
+        queryParams['provenances'] <- provenances
+      }
+
+      if (!missing(`metadata`)) {
+        queryParams['metadata'] <- metadata
+      }
+
+      urlPath <- "/core/data/count"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- Integer$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }
@@ -271,7 +387,7 @@ DataApi <- R6::R6Class(
       }
 
     },
-    delete_data_on_search = function(experiment,scientific_object,variable,provenance,...){
+    delete_data_on_search = function(experiment,target,variable,provenance,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -291,8 +407,8 @@ DataApi <- R6::R6Class(
         queryParams['experiment'] <- experiment
       }
 
-      if (!missing(`scientific_object`)) {
-        queryParams['scientific_object'] <- scientific_object
+      if (!missing(`target`)) {
+        queryParams['target'] <- target
       }
 
       if (!missing(`variable`)) {
@@ -384,6 +500,105 @@ DataApi <- R6::R6Class(
           json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
           return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
         }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    export_data = function(start_date,end_date,timezone,experiments,targets,variables,devices,min_confidence,max_confidence,provenances,metadata,mode,with_raw_data,order_by,page,page_size,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`start_date`)) {
+        queryParams['start_date'] <- start_date
+      }
+
+      if (!missing(`end_date`)) {
+        queryParams['end_date'] <- end_date
+      }
+
+      if (!missing(`timezone`)) {
+        queryParams['timezone'] <- timezone
+      }
+
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
+      }
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`variables`)) {
+        queryParams['variables'] <- variables
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
+      }
+
+      if (!missing(`min_confidence`)) {
+        queryParams['min_confidence'] <- min_confidence
+      }
+
+      if (!missing(`max_confidence`)) {
+        queryParams['max_confidence'] <- max_confidence
+      }
+
+      if (!missing(`provenances`)) {
+        queryParams['provenances'] <- provenances
+      }
+
+      if (!missing(`metadata`)) {
+        queryParams['metadata'] <- metadata
+      }
+
+      if (!missing(`mode`)) {
+        queryParams['mode'] <- mode
+      }
+
+      if (!missing(`with_raw_data`)) {
+        queryParams['with_raw_data'] <- with_raw_data
+      }
+
+      if (!missing(`order_by`)) {
+        queryParams['order_by'] <- order_by
+      }
+
+      if (!missing(`page`)) {
+        queryParams['page'] <- page
+      }
+
+      if (!missing(`page_size`)) {
+        queryParams['page_size'] <- page_size
+      }
+
+      urlPath <- "/core/data/export"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+        # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
         return(Response$new(json$metadata, json, resp, FALSE))
@@ -542,7 +757,7 @@ DataApi <- R6::R6Class(
       }
 
     },
-    get_data_file_descriptions_by_search = function(rdf_type,start_date,end_date,timezone,experiment,scientific_objects,provenances,metadata,order_by,page,page_size,...){
+    get_data_file_descriptions_by_search = function(rdf_type,start_date,end_date,timezone,experiments,targets,devices,provenances,metadata,order_by,page,page_size,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -574,12 +789,16 @@ DataApi <- R6::R6Class(
         queryParams['timezone'] <- timezone
       }
 
-      if (!missing(`experiment`)) {
-        queryParams['experiment'] <- experiment
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
       }
 
-      if (!missing(`scientific_objects`)) {
-        queryParams['scientific_objects'] <- scientific_objects
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
       }
 
       if (!missing(`provenances`)) {
@@ -619,6 +838,69 @@ DataApi <- R6::R6Class(
           for(i in 1:nrow(data)){
             row <- data[i,]
             returnObject <- DataFileGetDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    get_datafiles_provenances = function(experiments,targets,devices,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
+      }
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
+      }
+
+      urlPath <- "/core/datafiles/provenances"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ProvenanceGetDTO$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }
@@ -794,6 +1076,195 @@ DataApi <- R6::R6Class(
       }
 
     },
+    get_used_provenances = function(experiments,targets,variables,devices,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
+      }
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`variables`)) {
+        queryParams['variables'] <- variables
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
+      }
+
+      urlPath <- "/core/data/provenances"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ProvenanceGetDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    get_used_variables = function(experiments,targets,provenances,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
+      }
+
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
+      }
+
+      if (!missing(`provenances`)) {
+        queryParams['provenances'] <- provenances
+      }
+
+      urlPath <- "/core/data/variables"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "GET",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "GET"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ProvenanceGetDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    import_csv_data = function(provenance,file,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`provenance`)) {
+        queryParams['provenance'] <- provenance
+      }
+
+      body <- list(
+          "file" = httr::upload_file(file)
+      )
+
+      urlPath <- "/core/data/import"
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "POST",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "POST"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- DataCSVValidationDTO$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
     post_data_file = function(description,file,...){
       args <- list(...)
       queryParams <- list()
@@ -913,7 +1384,7 @@ DataApi <- R6::R6Class(
       }
 
     },
-    search_data_list = function(start_date,end_date,timezone,experiment,scientific_objects,variables,min_confidence,max_confidence,provenances,metadata,order_by,page,page_size,...){
+    search_data_list = function(start_date,end_date,timezone,experiments,targets,variables,devices,min_confidence,max_confidence,provenances,metadata,order_by,page,page_size,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -941,16 +1412,20 @@ DataApi <- R6::R6Class(
         queryParams['timezone'] <- timezone
       }
 
-      if (!missing(`experiment`)) {
-        queryParams['experiment'] <- experiment
+      if (!missing(`experiments`)) {
+        queryParams['experiments'] <- experiments
       }
 
-      if (!missing(`scientific_objects`)) {
-        queryParams['scientific_objects'] <- scientific_objects
+      if (!missing(`targets`)) {
+        queryParams['targets'] <- targets
       }
 
       if (!missing(`variables`)) {
         queryParams['variables'] <- variables
+      }
+
+      if (!missing(`devices`)) {
+        queryParams['devices'] <- devices
       }
 
       if (!missing(`min_confidence`)) {
@@ -1166,7 +1641,74 @@ DataApi <- R6::R6Class(
       }
 
     },
-    update1 = function(body,...){
+    update_confidence = function(uri,body,...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      self$apiClient$basePath =  sub("/$", "",get("BASE_PATH",opensilexWSClientR:::configWS))
+      if(self$apiClient$basePath == ""){
+        stop("Wrong you must first connect with connectToOpenSILEX")
+      }
+      
+      #if (!missing(`authorization`)) {
+      #  headerParams['Authorization'] <- authorization
+      #}
+      #if (!missing(`accept_language`)) {
+      #  headerParams['Accept-Language'] <- accept_language
+      #}
+
+      if (!missing(`body`)) {
+        if(is.list(`body`)){
+          bodyList <- lapply(`body`, function(x){x$toJSONString()})
+          bodyListPaste <- paste(bodyList, collapse=', ' )
+          body <- paste('[',bodyListPaste,']')
+        }else{
+          body <- paste('[',`body`$toJSONString(),']')
+        }
+      } else {
+        body <- NULL
+      }
+     
+      urlPath <- "/core/data/{uri}/confidence"
+      if (!missing(`uri`)) {
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+      }
+
+      resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
+                                 method = "PUT",
+                                 queryParams = queryParams,
+                                 headerParams = headerParams,
+                                 body = body,
+                                 ...)
+      method = "PUT"
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+       
+        if(method == "GET"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          data <- json$result
+          returnedOjects = list()
+          for(i in 1:nrow(data)){
+            row <- data[i,]
+            returnObject <- ObjectUriResponse$new()
+            returnObject$fromJSONObject(row)
+            returnedOjects = c(returnedOjects,returnObject)
+          }
+          return(Response$new(json$metadata,returnedOjects, resp, TRUE))
+        }
+        if(method == "POST" || method == "PUT"){
+          json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+          return(Response$new(json$metadata, json$metadata$datafiles, resp, TRUE))
+        }
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        json <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        return(Response$new(json$metadata, json, resp, FALSE))
+      }
+
+    },
+    update_provenance = function(body,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -1229,7 +1771,7 @@ DataApi <- R6::R6Class(
       }
 
     },
-    update_confidence = function(uri,body,...){
+    validate_csv = function(provenance,file,...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -1245,30 +1787,22 @@ DataApi <- R6::R6Class(
       #  headerParams['Accept-Language'] <- accept_language
       #}
 
-      if (!missing(`body`)) {
-        if(is.list(`body`)){
-          bodyList <- lapply(`body`, function(x){x$toJSONString()})
-          bodyListPaste <- paste(bodyList, collapse=', ' )
-          body <- paste('[',bodyListPaste,']')
-        }else{
-          body <- paste('[',`body`$toJSONString(),']')
-        }
-      } else {
-        body <- NULL
-      }
-     
-      urlPath <- "/core/data/{uri}/confidence"
-      if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+      if (!missing(`provenance`)) {
+        queryParams['provenance'] <- provenance
       }
 
+      body <- list(
+          "file" = httr::upload_file(file)
+      )
+
+      urlPath <- "/core/data/import_validation"
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
-                                 method = "PUT",
+                                 method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
                                  body = body,
                                  ...)
-      method = "PUT"
+      method = "POST"
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
        
         if(method == "GET"){
@@ -1277,7 +1811,7 @@ DataApi <- R6::R6Class(
           returnedOjects = list()
           for(i in 1:nrow(data)){
             row <- data[i,]
-            returnObject <- ObjectUriResponse$new()
+            returnObject <- DataCSVValidationDTO$new()
             returnObject$fromJSONObject(row)
             returnedOjects = c(returnedOjects,returnObject)
           }
