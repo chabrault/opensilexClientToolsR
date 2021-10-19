@@ -131,7 +131,7 @@ AnnotationsApi <- R6::R6Class(
           bodyListPaste <- paste(bodyList, collapse=', ' )
           body <- paste('[',bodyListPaste,']')
         }else{
-          body <- paste('[',`body`$toJSONString(),']')
+          body <- paste(`body`$toJSONString())
         }
       } else {
         body <- NULL
@@ -450,7 +450,7 @@ AnnotationsApi <- R6::R6Class(
           bodyListPaste <- paste(bodyList, collapse=', ' )
           body <- paste('[',bodyListPaste,']')
         }else{
-          body <- paste('[',`body`$toJSONString(),']')
+          body <- paste(`body`$toJSONString())
         }
       } else {
         body <- NULL
