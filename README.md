@@ -39,19 +39,21 @@ install(".")
 ```R
 library(opensilexClientToolsR)
 # Le chargement a nécessité le package : opensilexWSClientR
+
+# Make sure to change the url to point to your instance (and don't forget to add "/rest" at the end)
+# The identifier and password should be the ones of an existing account on that instance
 opensilexClientToolsR::connectToOpenSILEX(identifier="guest@opensilex.org",password="guest", url = "https://localhost/rest")
 # 2019-10-04 10:05:40 INFO::Query executed and data recovered - WS2
 annoService <- AnnotationsApi$new()
 # create Annotations
-newAnnotation <- AnnotationDTO$new()
-newAnnotation$creator <- "http://www.phenome-fppn.fr/mtp/id/agent/admin_opensilex"
-newAnnotation$targets <- list("http://www.phenome-fppn.fr/test/id/event/99fe49a7-37e0-4b98-978e-132288172d35")
-newAnnotation$motivatedBy <- "http://www.w3.org/ns/oa#describing"
-newAnnotation$bodyValues <-  list("test2")
-newAnnotation2 <- newAnnotation$clone()
-annoService$post1(body=list(newAnnotation2,newAnnotation))
-# search Annotations
+newAnnotation <- AnnotationCreationDTO$new(
+    description="Your annotation body",
+    targets=list("test:set/scientific-objects/so-test-gabriel"),
+    motivation="http://www.w3.org/ns/oa#assessing"
+)
+annoService$create_annotation(body = newAnnotation)
 
+# search Annotations
 annot <- annoService$get_annotations_by_search()
 # <Response>
 #   Public:
