@@ -14,7 +14,7 @@ To install the **opensilexClientToolsR** package, the easiest is to install it d
 
 ```R
 library(remotes)
-install_github("OpenSILEX/opensilexClientToolsR",  ref="1.0.0-rc+2")
+install_github("OpenSILEX/opensilexClientToolsR",  ref="1.0.0-rc2")
 ```
 
 ### Build Prerequisites
