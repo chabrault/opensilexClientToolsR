@@ -47,6 +47,13 @@ ObjectDTO  <- R6::R6Class(
         }
          
       } 
+    },
+    fromJSON = function(object) {
+      if(is.null(self$attribs)){
+        self$attribs <-  NULL
+      }else{
+        self$attribs <- jsonlite::fromJSON(object)
+      } 
     }
   )
 )

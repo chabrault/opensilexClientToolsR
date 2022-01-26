@@ -9,5 +9,5 @@ License: GPL-3 | file LICENSE
 LazyData: true
 Suggests: testthat
 Imports: jsonlite, httr, R6
-RoxygenNote: 7.1.2
+RoxygenNote: 6.1.1
 Remotes: github::opensilex/opensilex-ws-client-r@3.0.0
