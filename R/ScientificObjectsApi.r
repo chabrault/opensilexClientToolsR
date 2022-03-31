@@ -166,7 +166,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
@@ -268,7 +268,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}/datafiles/provenances"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
@@ -323,7 +323,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}/data/provenances"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
@@ -382,7 +382,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
@@ -437,7 +437,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}/experiments"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
@@ -492,7 +492,7 @@ ScientificObjectsApi <- R6::R6Class(
 
       urlPath <- "/core/scientific_objects/{uri}/variables"
       if (!missing(`uri`)) {
-        urlPath <- gsub(paste0("\\{", "uri", "\\}"), `uri`, urlPath)
+        urlPath <- gsub(paste0("\\{", "uri", "\\}"), URLencode(`uri`,reserved=TRUE), urlPath)
       }
 
       resp <- self$apiClient$callApi(url = paste0(self$apiClient$basePath, urlPath),
